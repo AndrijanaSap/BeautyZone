@@ -1,0 +1,38 @@
+<!-- <app-navigation></app-navigation> -->
+<div class="wrapper">
+    <div class="page-header page-header-xs" data-parallax="true" style="background-image: url('./assets/img/fabio-mangione.jpg');">
+        <div class="filter"></div>
+    </div>
+    <div class="section profile-content">
+        <div class="container">
+            <div class="owner">
+                <div class="name">
+                    <h4 class="title">Jane Faker<br /></h4>
+                    <h6 class="description">Music Producer</h6>
+                </div>
+            </div>
+            <br/>
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper justify-content-center">
+                    <ul ngbNav #nav="ngbNav" class="nav-tabs  justify-content-center">
+                        <li *ngFor="let categoryWithServices of categoriesWithServices" [ngbNavItem]="categoryWithServices.id">
+                            <a ngbNavLink> {{ categoryWithServices.name }}</a>
+                            <ng-template ngbNavContent >
+                                <div class="row following" id="follows">
+                                    <div class="col-md-6 ml-auto mr-auto">
+                                        <ul  *ngFor="let service of categoryWithServices.services">
+                                            <li>
+                                                {{ service.name }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
