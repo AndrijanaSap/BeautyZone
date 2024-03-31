@@ -1,1 +1,21 @@
-<p>service-details works!</p>
+<div class="wrapper">
+    <div class="page-header page-header-xs" data-parallax="true" style="background-image: url('./assets/img/horizontal-banner-beauty-products.jpg');">
+        <div class="filter"></div>
+    </div>
+    <div class="main">
+        <div class="section text-center">
+    <div class="section profile-content">
+        <div class="container">
+            <div *ngIf="service" class="row">
+                <div class="col-md-6"><img class="img-rounded img-responsive" [src]='service.imgUrl'></div>
+                <div class="col-md-6">
+                   <h1> {{ service.name }} </h1>
+                   <p> {{ service.description }}</p>
+                   <button class="btn btn-primary btn-round" routerLink="/appointments" [queryParams]="{serviceId: service.id}">Make an appointment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>

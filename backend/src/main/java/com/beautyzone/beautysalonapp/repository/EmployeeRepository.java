@@ -1,17 +1,19 @@
 package com.beautyzone.beautysalonapp.repository;
 
+import com.beautyzone.beautysalonapp.constants.Role;
 import com.beautyzone.beautysalonapp.domain.Category;
+//import com.beautyzone.beautysalonapp.domain.Employee;
 import com.beautyzone.beautysalonapp.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface CategoryRepository extends JpaRepository<Category, Integer> {
+public interface EmployeeRepository extends JpaRepository<User, Integer> {
 
-    Optional<Category> findCategoryById(Integer id);
-    void deleteCategoryById(Integer id);
-
-    List<Category> findAll();
+    @Query("SELECT e FROM User e JOIN e.services s WHERE s.id = :serviceId")
+    List<User> findEmployeesByServiceId(Integer serviceId);
+    List<User> findAllByRole(Role role);
 
 }

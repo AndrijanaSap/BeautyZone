@@ -1,21 +1,16 @@
 package com.beautyzone.beautysalonapp.repository;
 
-import com.beautyzone.beautysalonapp.constants.AppointmentType;
-import com.beautyzone.beautysalonapp.domain.Appointment;
-import com.beautyzone.beautysalonapp.domain.Category;
-import com.beautyzone.beautysalonapp.domain.Employee;
+import com.beautyzone.beautysalonapp.domain.Timeslot;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
-public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
-    @Query("SELECT a FROM Appointment a ORDER BY a.startTime DESC")
-    Optional<Appointment> findLastAppointmentByStartTime();
+public interface TimeSlotRepository extends JpaRepository<Timeslot, Integer> {
+//    @Query("SELECT a FROM Timeslot a ORDER BY a.startTime DESC")
+//    Optional<Timeslot> findLastAppointmentByStartTime();
 //    @Query("SELECT e FROM Employee e JOIN e.services s WHERE s.id = :serviceId")
 //    List<Appointment> findAllFreeAppointmentsByEmployee(Integer employeeId, Integer durationInMinutes);
 
@@ -49,12 +44,12 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 //            LocalDateTime startDate, LocalDateTime endDate,
 //            AppointmentType appointmentType, List<Integer> employeeIds);
 
-    @Query(value = "SELECT * FROM beautysalon.appointment a " +
-            "WHERE a.start_time BETWEEN :startTime AND :endTime " +
-            "AND a.appointment_type = :appointmentType " +
-            "AND a.employee_id IN :employeeIds " +
-            "ORDER BY DATE(a.start_time), a.employee_id, a.start_time", nativeQuery = true)
-    List<Appointment> findByStartTimeBetweenAndAppointmentTypeAndEmployeeIdInOrderByEmployeeAscStartTimeAsc(
-            LocalDateTime startTime, LocalDateTime endTime, String appointmentType, List<Integer> employeeIds);
+    @Query(value = "SELECT * FROM beautysalon.timeslot t " +
+            "WHERE t.start_time BETWEEN :startTime AND :endTime " +
+            "AND t.time_slot_type = :timeSlotType " +
+            "AND t.employee_id IN :employeeIds " +
+            "ORDER BY DATE(t.start_time), t.employee_id, t.start_time", nativeQuery = true)
+    List<Timeslot> findByStartTimeBetweenAndTimeSlotTypeAndEmployeeIdInOrderByEmployeeAscStartTimeAsc(
+            LocalDateTime startTime, LocalDateTime endTime, String timeSlotType, List<Integer> employeeIds);
 
 }

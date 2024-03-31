@@ -1,4 +1,4 @@
-package com.beautyzone.beautysalonapp.auth;
+package com.beautyzone.beautysalonapp.rest.dto;
 
 
 import lombok.Builder;

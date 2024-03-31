@@ -1,0 +1,34 @@
+<div class="wrapper">
+    <div class="page-header" style="background-image: url('./assets/img/login-image.jpg');">
+        <div class="filter"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-sm-6 mr-auto ml-auto">
+                      <div class="card card-register">
+                          <h3 class="title">Welcome</h3>
+                          <form class="register-form" [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
+
+                            <mat-form-field class="example-full-width" style="width: 100%;">
+                                <mat-label>Email</mat-label>
+                                <input matInput placeholder="example@gmail.com" formControlName="email">
+                              </mat-form-field>
+
+                              <mat-form-field style="width: 100%;">
+                                <mat-label>Enter your password</mat-label>
+                                <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" >
+                                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                  <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                </button>
+                              </mat-form-field>
+
+                              <button type="submit"  [disabled]="!loginForm.valid" class="btn btn-block btn-round">Login</button>
+                          </form>
+                          <div class="forgot">
+                              <a routerLink="/register" class="btn btn-link">Register</a>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>

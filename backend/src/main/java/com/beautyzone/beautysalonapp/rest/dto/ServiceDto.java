@@ -4,12 +4,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ServiceWithCategoriesDto {
+public class ServiceDto {
     private Integer id;
     private String name;
     private String description;
     private String imgUrl;
     private Integer durationInMinutes;
     private Double price;
-    private CategoryDto category;
 }

@@ -1,18 +1,12 @@
 package com.beautyzone.beautysalonapp.rest.mapper;
 
-import com.beautyzone.beautysalonapp.domain.Appointment;
-import com.beautyzone.beautysalonapp.domain.Service;
-import com.beautyzone.beautysalonapp.rest.dto.AppointmentResponseDto;
-import com.beautyzone.beautysalonapp.rest.dto.ServiceDto;
+import com.beautyzone.beautysalonapp.domain.Timeslot;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-
-import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface AppointmentMapper {
+public interface TimeSlotMapper {
 //    Appointment AppointmentResponseDtoToAppointment(AppointmentResponseDto appointmentResponseDto);
 //    @Mapping(target = "category", source = "category", ignore = true) // Ignore the field 'category'
-    AppointmentResponseDto appointmentToAppointmentResponseDto(Appointment appointment);
+//    AppointmentResponseDto timeSlotToAppointmentResponseDto(Timeslot appointment);
 //    List<ServiceDto> servicesToServiceDtos(List<Service> services);
 }

@@ -4,7 +4,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ServiceWithCategoriesDto {
+public class ServiceWithCategoryDto {
     private Integer id;
     private String name;
     private String description;

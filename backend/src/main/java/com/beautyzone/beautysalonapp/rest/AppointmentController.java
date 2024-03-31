@@ -2,42 +2,54 @@ package com.beautyzone.beautysalonapp.rest;
 
 import com.beautyzone.beautysalonapp.rest.dto.AppointmentRequestDto;
 import com.beautyzone.beautysalonapp.rest.dto.AvailabilityRequestDto;
+import com.beautyzone.beautysalonapp.service.impl.AppointmentService;
 import com.beautyzone.beautysalonapp.service.impl.TimeSlotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/v1/timeslots")
+@RequestMapping("/api/v1/appointments")
 @RequiredArgsConstructor
-public class TimeSlotController {
+public class AppointmentController {
 
-    private final TimeSlotService timeSlotService;
+    private final AppointmentService appointmentService;
 
-//    @GetMapping
-//    public ResponseEntity<?> findAllTimeSlots() {
-//        try {
-//            return ResponseEntity.ok(timeSlotService.findAll());
-//        } catch (Exception ex){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-//        }
-//    }
-
-    @PostMapping("/checkAvailability")
-    public ResponseEntity<?> checkAvailability(@RequestBody AvailabilityRequestDto availabilityRequestDto){
+    @GetMapping("/getAllByClientId/{clientId}")
+    public ResponseEntity<?> getAllByClientId(@PathVariable Integer clientId) {
         try {
-            // TODO: If range periodFrom-periodTo(or periodTo minus periodFrom) is > 1 year, return validation error
-            return ResponseEntity.ok(timeSlotService.checkAvailability(availabilityRequestDto));
-        } catch (Exception ex){
+            return ResponseEntity.ok(appointmentService.findAllByClientId(clientId));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+    @GetMapping("/{appointmentId}")
+    public ResponseEntity<?> getAppointmentById(@PathVariable Integer appointmentId) {
+        try {
+            return ResponseEntity.ok(appointmentService.findById(appointmentId));
+        } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
     @PostMapping("/createAppointment")
     public ResponseEntity<?> createAnAppointment(@RequestBody AppointmentRequestDto appointmentRequestDto){
         try {
-            return ResponseEntity.ok(timeSlotService.createAppointment(appointmentRequestDto));
+            return ResponseEntity.ok(appointmentService.createAppointment(appointmentRequestDto));
+        } catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/calculateSignature", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> calculateSignature(@RequestBody Map<String, String> params){
+        try {
+            String key = params.remove("key");
+            return ResponseEntity.ok(appointmentService.calculateSignature(key, params));
         } catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }

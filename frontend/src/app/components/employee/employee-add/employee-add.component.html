@@ -1,0 +1,87 @@
+<div class="wrapper">
+  <div class="page-header page-header-xs" data-parallax="true"
+    style="background-image: url('./assets/img/horizontal-banner-beauty-products.jpg');">
+    <div class="filter"></div>
+  </div>
+  <div class="section profile-content">
+
+    <div class="nav-tabs-navigation">
+      <div class="nav-tabs-wrapper justify-content-center">
+
+        <div class="">
+          <div class="container">
+            <h3 class="title">Add employee</h3>
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmitRegister()">
+              <div class="row ">
+                <div class="col-lg-6">
+                  <div class="row">
+                    <mat-form-field>
+                      <mat-label>Email</mat-label>
+                      <input matInput placeholder="example@gmail.com" formControlName="email">
+                    </mat-form-field>
+                  </div>
+                  <div class="row">
+                    <mat-form-field>
+                      <mat-label>Enter your password</mat-label>
+                      <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+                      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                      </button>
+                    </mat-form-field>
+                  </div>
+                  <div class="row">
+                    <mat-form-field>
+                      <mat-label>Name</mat-label>
+                      <input matInput placeholder="Name" formControlName="name">
+                    </mat-form-field>
+                  </div>
+                  <div class="row">
+
+                    <mat-form-field>
+                      <mat-label>Surname</mat-label>
+                      <input matInput placeholder="Surname" formControlName="surname">
+                    </mat-form-field>
+                  </div>
+                  <div class="row">
+                    <mat-form-field>
+                      <mat-label>Phone</mat-label>
+                      <input matInput placeholder="07XXXXXXX" formControlName="phone">
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <mat-form-field style="width: 100%;">
+                    <mat-label>Job positions</mat-label>
+                    <mat-chip-grid #chipGrid aria-label="Job positions">
+                      <mat-chip-row *ngFor="let service of services" (removed)="remove(service)">
+                        {{service.name}}
+                        <button matChipRemove [attr.aria-label]="'remove ' + service">
+                          <mat-icon>cancel</mat-icon>
+                        </button>
+                      </mat-chip-row>
+                    </mat-chip-grid>
+                    <input placeholder="New job position..." #fruitInput [formControl]="fruitCtrl"
+                      [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)" />
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                      <mat-option *ngFor="let filteredService of filteredServices | async" [value]="filteredService">
+                        {{filteredService.name}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row ">
+                <div class="col-12">
+                  <button type="submit" [disabled]="!registerForm.valid" class="btn btn-primary btn-round">Add</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

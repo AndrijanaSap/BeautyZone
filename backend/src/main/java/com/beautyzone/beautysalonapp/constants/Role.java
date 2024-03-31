@@ -1,6 +1,8 @@
-package com.beautyzone.beautysalonapp.domain;
+package com.beautyzone.beautysalonapp.constants;
 
 public enum Role {
     USER,
-    ADMIN
+    ADMIN,
+    EMPLOYEE,
+    CLIENT
 }

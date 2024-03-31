@@ -1,9 +1,11 @@
 package com.beautyzone.beautysalonapp.service.impl;
 
-import com.beautyzone.beautysalonapp.constants.AppointmentType;
-import com.beautyzone.beautysalonapp.domain.Appointment;
-import com.beautyzone.beautysalonapp.domain.Employee;
-import com.beautyzone.beautysalonapp.repository.AppointmentRepository;
+import com.beautyzone.beautysalonapp.constants.Role;
+import com.beautyzone.beautysalonapp.constants.TimeSlotType;
+import com.beautyzone.beautysalonapp.domain.Timeslot;
+//import com.beautyzone.beautysalonapp.domain.Employee;
+import com.beautyzone.beautysalonapp.domain.User;
+import com.beautyzone.beautysalonapp.repository.TimeSlotRepository;
 import com.beautyzone.beautysalonapp.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,30 +16,30 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Service
-public class DailyAppointmentPopulationService {
+public class DailyTimeSlotPopulationService {
 
     @Autowired
-    private AppointmentRepository appointmentRepository;
+    private TimeSlotRepository timeSlotRepository;
     @Autowired
     private EmployeeRepository employeeRepository;
 
     public void prepopulateRowsDaily() {
         LocalDate date = LocalDate.now().plusYears(1);
         // Loop through each employee
-        List<Employee> employees = employeeRepository.findAll();
-        for (Employee employee : employees) {
+        List<User> employees = employeeRepository.findAllByRole(Role.EMPLOYEE);
+        for (User employee : employees) {
             LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.of(8, 0)); // Start at 8 am
             LocalDateTime endDateTime = LocalDateTime.of(date, LocalTime.of(22, 0)); // End at 10 pm
 
             // Loop from start to end in 30-minute intervals
             while (startDateTime.isBefore(endDateTime)) {
-                Appointment appointment = new Appointment();
-                appointment.setEmployee(employee);
-                appointment.setCreationTime(LocalDateTime.now());
-                appointment.setStartTime(startDateTime);
-                appointment.setEndTime(startDateTime.plusMinutes(30));
-                appointment.setAppointmentType(AppointmentType.AVAILABLE);
-                appointmentRepository.save(appointment);
+                Timeslot timeSlot = new Timeslot();
+                timeSlot.setEmployee(employee);
+                timeSlot.setCreationTime(LocalDateTime.now());
+                timeSlot.setStartTime(startDateTime);
+                timeSlot.setEndTime(startDateTime.plusMinutes(30));
+                timeSlot.setTimeSlotType(TimeSlotType.AVAILABLE);
+                timeSlotRepository.save(timeSlot);
 
                 // Move to the next 30-minute interval
                 startDateTime = startDateTime.plusMinutes(30);

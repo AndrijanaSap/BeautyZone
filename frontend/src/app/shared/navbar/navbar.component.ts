@@ -7,10 +7,11 @@ import { Location, LocationStrategy, PathLocationStrategy } from '@angular/commo
     styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+
     private toggleButton: any;
     private sidebarVisible: boolean;
 
-    constructor(public location: Location, private element : ElementRef) {
+    constructor(public location: Location, private element: ElementRef) {
         this.sidebarVisible = false;
     }
 
@@ -48,27 +49,117 @@ export class NavbarComponent implements OnInit {
         // }
     };
     isHome() {
-      var titlee = this.location.prepareExternalUrl(this.location.path());
-      if(titlee.charAt(0) === '#'){
-          titlee = titlee.slice( 1 );
-      }
-        if( titlee === '/home' ) {
+        var titlee = this.location.prepareExternalUrl(this.location.path());
+        if (titlee.charAt(0) === '#') {
+            titlee = titlee.slice(1);
+        }
+        if (titlee === '/home') {
             return true;
         }
         else {
             return false;
         }
     }
-    isDocumentation() {
-      var titlee = this.location.prepareExternalUrl(this.location.path());
-      if(titlee.charAt(0) === '#'){
-          titlee = titlee.slice( 1 );
-      }
-        if( titlee === '/documentation' ) {
+
+    isLoggedIn() {
+        return localStorage.getItem("token");
+    }
+
+    isThankYouPage() {
+        var titlee = this.location.prepareExternalUrl(this.location.path());
+        if (titlee.charAt(0) === '#') {
+            titlee = titlee.slice(1);
+        }
+        if (titlee.startsWith('/thank-you')) {
             return true;
         }
         else {
             return false;
         }
+    }
+
+    isMyProfile() {
+        var titlee = this.location.prepareExternalUrl(this.location.path());
+        if (titlee.charAt(0) === '#') {
+            titlee = titlee.slice(1);
+        }
+        if (titlee.startsWith('/my-profile')) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    isClientAppointments() {
+        var titlee = this.location.prepareExternalUrl(this.location.path());
+        if (titlee.charAt(0) === '#') {
+            titlee = titlee.slice(1);
+        }
+        if (titlee.startsWith('/client-appointments')) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    
+    isServices() {
+        var titlee = this.location.prepareExternalUrl(this.location.path());
+        if (titlee.charAt(0) === '#') {
+            titlee = titlee.slice(1);
+        }
+        if (titlee.startsWith('/services')) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+        
+    isLogin() {
+        var titlee = this.location.prepareExternalUrl(this.location.path());
+        if (titlee.charAt(0) === '#') {
+            titlee = titlee.slice(1);
+        }
+        if (titlee.startsWith('/login')) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+            
+    isAdminLogin() {
+        var titlee = this.location.prepareExternalUrl(this.location.path());
+        if (titlee.charAt(0) === '#') {
+            titlee = titlee.slice(1);
+        }
+        if (titlee.startsWith('/admin-login')) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    isDocumentation() {
+        var titlee = this.location.prepareExternalUrl(this.location.path());
+        if (titlee.charAt(0) === '#') {
+            titlee = titlee.slice(1);
+        }
+        if (titlee === '/documentation') {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    logOut() {
+        localStorage.clear();
     }
 }

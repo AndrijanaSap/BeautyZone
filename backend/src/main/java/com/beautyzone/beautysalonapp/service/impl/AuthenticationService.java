@@ -1,12 +1,15 @@
-package com.beautyzone.beautysalonapp.auth;
+package com.beautyzone.beautysalonapp.service.impl;
 
 import com.beautyzone.beautysalonapp.constants.TokenType;
-import com.beautyzone.beautysalonapp.domain.Role;
+import com.beautyzone.beautysalonapp.constants.Role;
 import com.beautyzone.beautysalonapp.domain.Token;
 import com.beautyzone.beautysalonapp.repository.TokenRepository;
 import com.beautyzone.beautysalonapp.repository.UserRepository;
 import com.beautyzone.beautysalonapp.domain.User;
 import com.beautyzone.beautysalonapp.config.JwtService;
+import com.beautyzone.beautysalonapp.rest.dto.AuthenticationRequest;
+import com.beautyzone.beautysalonapp.rest.dto.AuthenticationResponse;
+import com.beautyzone.beautysalonapp.rest.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,13 +31,15 @@ public class AuthenticationService {
                 .surname(request.getSurname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .phone(request.getPhone())
+                .role(Role.CLIENT)
                 .build();
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         saveUserToken(savedUser, jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .userId(user.getId())
                 .build();
     }
 
@@ -52,6 +57,7 @@ public class AuthenticationService {
         saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .userId(user.getId())
                 .build();
     }
 

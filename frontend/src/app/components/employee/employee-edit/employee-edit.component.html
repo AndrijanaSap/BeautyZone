@@ -1,0 +1,66 @@
+<div class="wrapper">
+    <div class="page-header page-header-xs" data-parallax="true"
+        style="background-image: url('./assets/img/horizontal-banner-beauty-products.jpg');">
+        <div class="filter"></div>
+    </div>
+    <div class="section profile-content">
+        <div class="container">
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper justify-content-center">  
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-6 mr-auto ml-auto">
+                          <div class="card card-register">
+                              <h3 class="title">Edit employee</h3>
+                              <form class="register-form" [formGroup]="updateForm" (ngSubmit)="onSubmit()">
+    
+                                <mat-form-field class="example-full-width" style="width: 100%;">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput placeholder="example@gmail.com" formControlName="email">
+                                  </mat-form-field>    
+                                  
+                                <mat-form-field class="example-full-width" style="width: 100%;">
+                                    <mat-label>Name</mat-label>
+                                    <input matInput placeholder="Name" formControlName="name">
+                                  </mat-form-field>
+        
+                                <mat-form-field class="example-full-width" style="width: 100%;">
+                                    <mat-label>Surname</mat-label>
+                                    <input matInput placeholder="Surname" formControlName="surname">
+                                  </mat-form-field>
+                  
+                                <mat-form-field class="example-full-width" style="width: 100%;">
+                                    <mat-label>Phone</mat-label>
+                                    <input matInput placeholder="07XXXXXXX" formControlName="phone">
+                                  </mat-form-field>
+    
+                  <mat-form-field style="width: 100%;">
+                    <mat-label>Job positions</mat-label>
+                    <mat-chip-grid #chipGrid aria-label="Job positions">
+                      <mat-chip-row *ngFor="let service of services" (removed)="remove(service)">
+                        {{service.name}}
+                        <button matChipRemove [attr.aria-label]="'remove ' + service">
+                          <mat-icon>cancel</mat-icon>
+                        </button>
+                      </mat-chip-row>
+                    </mat-chip-grid>
+                    <input placeholder="Add job position..." #fruitInput [formControl]="fruitCtrl"
+                      [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)" />
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                      <mat-option *ngFor="let filteredService of filteredServices | async" [value]="filteredService">
+                        {{filteredService.name}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+            
+                                  <button type="submit"  [disabled]="!updateForm.valid" class="btn btn-block btn-round">Submit</button>
+                              </form>
+                          </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

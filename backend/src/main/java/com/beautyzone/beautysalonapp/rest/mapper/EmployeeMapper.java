@@ -1,17 +1,19 @@
 package com.beautyzone.beautysalonapp.rest.mapper;
 
 import com.beautyzone.beautysalonapp.domain.Category;
+//import com.beautyzone.beautysalonapp.domain.Employee;
+import com.beautyzone.beautysalonapp.domain.Service;
 import com.beautyzone.beautysalonapp.rest.dto.CategoryDto;
+import com.beautyzone.beautysalonapp.rest.dto.EmployeeDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface CategoryMapper {
-    Category categoryDtoToCategory(CategoryDto categoryDto);
-//    CategoryDto categoryToCategoryDto(Category category);
-    CategoryDto categoryToCategoryDtoWithServiceDtos(Category category);
-
-    List<CategoryDto> categoriesToCategoryDtos(List<Category> categories);
+public interface EmployeeMapper {
+//    Employee employeeDtoToEmployee(EmployeeDto employeeDto);
+//    EmployeeDto employeeToEmployeeDto(Employee employee);
+//
+//    List<EmployeeDto> employeesToEmployeeDtos(List<Employee> employees);
 }

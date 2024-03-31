@@ -1,0 +1,42 @@
+<div class="wrapper">
+    <div class="page-header" style="background-image: url('./assets/img/thank-you-page-image.jpg');">
+        <div class="filter"></div>
+        <div class="container">
+            <div class="row" *ngIf="appointment">
+                <div class="col-lg-4 col-sm-6 mr-auto ml-auto">
+                    <div class="card card-thank-you">
+                        <div class="body-thank-you">
+                            <img src="https://www.freeiconspng.com/thumbs/success-icon/success-icon-10.png" />
+                            <h1 class="title">All done!</h1>
+                            <p class="margin">
+                                Thank you for your reservation, {{ appointment.name }}!
+                            </p>
+                            <h1 class="booking-details-title">
+                                Your booking details
+                            </h1>
+                            <div>
+                                <div class="row align-items-center">
+                                    <div class="col-lg-4">
+                                        <p>Service:</p>
+                                        <p> {{ appointment.service.name }} </p>
+                                    </div>
+                                    <div class="col-lg-4" style="border-left: 1px solid lightgrey;border-right: 1px solid lightgrey;">
+                                        <p>Date and time:</p>
+                                        <p> {{ appointment.appointmentDateTime | date: 'dd.MM.yyyy HH:mm'}} </p>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <p *ngIf="appointment.paymentMethod === 'CARD'">Amount paid:</p>
+                                        <p *ngIf="appointment.paymentMethod === 'CASH'">Amount to be paid:</p>
+                                        <p> {{ appointment.service.price | currency: 'EUR' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div id="bottom">Looking forward to serve you shortly.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

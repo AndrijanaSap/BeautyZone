@@ -1,11 +1,11 @@
 package com.beautyzone.beautysalonapp.rest.dto;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 @Data
-public class CategoryDto {
+public class EmployeeDto {
     private Integer id;
     private String name;
-    private List<ServiceDto> services;
 }

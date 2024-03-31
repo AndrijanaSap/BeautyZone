@@ -1,4 +1,4 @@
-package com.beautyzone.beautysalonapp.auth;
+package com.beautyzone.beautysalonapp.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class AuthenticationResponse {
 
     private String token;
+    private Integer userId;
 //    @JsonProperty("refresh_token")
 //    private String refreshToken;
 }

@@ -1,41 +1,35 @@
 <nav class="navbar navbar-expand-lg fixed-top navbar-transparent" color-on-scroll="500">
     <div class="container">
         <div class="navbar-translate">
-            <a class="navbar-brand"><img width="150" src="./../../../assets/img/logo-no-background.svg"></a>
+            <a class="navbar-brand" routerLink="/home"><img width="150" src="./../../../assets/img/logo-no-background.svg"></a>
         </div>
         <div class="navbar-collapse" id="navbarToggler">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item" *ngIf="!isDocumentation()">
-                    <a class="nav-link" rel="tooltip" title="Follow us on Twitter" data-placement="bottom" href="https://twitter.com/CreativeTim" target="_blank">
-                        <i class="fa fa-twitter"></i>
-                        <p class="d-lg-none">Twitter</p>
-                    </a>
-                </li>
-                <li class="nav-item" *ngIf="!isDocumentation()">
-                    <a class="nav-link" rel="tooltip" title="Like us on Facebook" data-placement="bottom" href="https://www.facebook.com/CreativeTim" target="_blank">
-                        <i class="fa fa-facebook-square"></i>
-                        <p class="d-lg-none">Facebook</p>
-                    </a>
-                </li>
-                <li class="nav-item" *ngIf="!isDocumentation()">
-                    <a class="nav-link" rel="tooltip" title="Follow us on Instagram" data-placement="bottom" href="https://www.instagram.com/CreativeTimOfficial" target="_blank">
-                        <i class="fa fa-instagram"></i>
-                        <p class="d-lg-none">Instagram</p>
-                    </a>
-                </li>
-                <li class="nav-item" *ngIf="!isDocumentation()">
+                <!-- <li class="nav-item" *ngIf="!isDocumentation() && !isThankYouPage()">
                     <a class="nav-link" ><i class="nc-icon nc-book-bookmark"></i> Our Team</a>
+                </li> -->
+                <li class="nav-item" *ngIf="!isServices()">
+                    <a class="nav-link" routerLink="/services">View our services</a>
                 </li>
-                <li class="nav-item" *ngIf="isHome()">
-                    <a class="btn btn-danger btn-round">View our services</a>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/employees">Employees</a>
                 </li>
-                <li class="nav-item" *ngIf="!isHome()">
+                <li class="nav-item" *ngIf="!isClientAppointments()">
+                    <a class="nav-link" routerLink="/client-appointments">My appointments</a>
+                </li>
+                <li class="nav-item" *ngIf="!isMyProfile()">
+                    <a class="nav-link" routerLink="/my-profile">My profile</a>
+                </li>
+                <li class="nav-item" *ngIf="!isLogin() && !isLoggedIn()">
+                    <a class="btn btn-danger btn-round" routerLink="/login">Log in</a>
+                </li>
+                <li class="nav-item" *ngIf="isLoggedIn()">
+                    <a class="nav-link" (click)="logOut()"  routerLink="/home">Log out</a>
+                </li>
+                <!-- <li class="nav-item" *ngIf="!isHome() && !isThankYouPage()">
                     <a [routerLink]="['/home']" *ngIf="!isDocumentation()" class="nav-link"><i class="nc-icon nc-layout-11"></i>Components</a>
                     <a [routerLink]="['/home']" *ngIf="isDocumentation()" class="nav-link">Back to Kit</a>
-                </li>
-                <li class="nav-item" *ngIf="isDocumentation()">
-                    <a href="https://github.com/creativetimofficial/paper-kit-2-angular/issues?ref=pk2-free-local" target="_blank" class="nav-link">Have an issue</a>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>

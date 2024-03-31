@@ -1,0 +1,50 @@
+<div class="wrapper">
+    <div class="page-header" style="background-image: url('./assets/img/login-image.jpg');">
+        <div class="filter"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-sm-6 mr-auto ml-auto">
+                      <div class="card card-register">
+                          <h3 class="title">Register</h3>
+                          <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmitRegister()">
+
+                            <mat-form-field class="example-full-width" style="width: 100%;">
+                                <mat-label>Email</mat-label>
+                                <input matInput placeholder="example@gmail.com" formControlName="email">
+                              </mat-form-field>
+
+                              <mat-form-field style="width: 100%;">
+                                <mat-label>Enter your password</mat-label>
+                                <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" >
+                                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                  <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                </button>
+                              </mat-form-field>
+
+                              
+                            <mat-form-field class="example-full-width" style="width: 100%;">
+                                <mat-label>Name</mat-label>
+                                <input matInput placeholder="Name" formControlName="name">
+                              </mat-form-field>
+
+                              
+                            <mat-form-field class="example-full-width" style="width: 100%;">
+                                <mat-label>Surname</mat-label>
+                                <input matInput placeholder="Surname" formControlName="surname">
+                              </mat-form-field>
+
+                              
+                            <mat-form-field class="example-full-width" style="width: 100%;">
+                                <mat-label>Phone</mat-label>
+                                <input matInput placeholder="07XXXXXXX" formControlName="phone">
+                              </mat-form-field>
+
+
+                              <button type="submit"  [disabled]="!registerForm.valid" class="btn btn-block btn-round">Register</button>
+                          </form>
+                      </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>

@@ -13,13 +13,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Schedule {
+public class Shift {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToMany(mappedBy = "employee")
-    private List<Employee> employee;
+    @ManyToMany(mappedBy = "shifts")
+    private List<User> users;
 
     private Date date;
 

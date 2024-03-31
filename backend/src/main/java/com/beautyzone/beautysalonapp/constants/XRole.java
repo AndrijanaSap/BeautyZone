@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import static com.beautyzone.beautysalonapp.constants.Permission.*;
 
 @RequiredArgsConstructor
-public enum Role {
+public enum XRole {
 
     USER(Collections.emptySet()),
     ADMIN(

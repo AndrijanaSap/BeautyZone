@@ -1,7 +1,7 @@
 package com.beautyzone.beautysalonapp.exception;
 
-public class UserNotFoundException extends RuntimeException {
-    public UserNotFoundException(String message) {
+public class NoSuchElementException extends RuntimeException {
+    public NoSuchElementException(String message) {
         super(message);
     }
 }

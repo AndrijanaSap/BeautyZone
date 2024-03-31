@@ -1,5 +1,9 @@
-package com.beautyzone.beautysalonapp.auth;
+package com.beautyzone.beautysalonapp.rest;
 
+import com.beautyzone.beautysalonapp.service.impl.AuthenticationService;
+import com.beautyzone.beautysalonapp.rest.dto.AuthenticationRequest;
+import com.beautyzone.beautysalonapp.rest.dto.AuthenticationResponse;
+import com.beautyzone.beautysalonapp.rest.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

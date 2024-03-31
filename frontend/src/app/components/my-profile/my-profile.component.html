@@ -1,0 +1,76 @@
+<div class="wrapper">
+    <div class="page-header page-header-xs" data-parallax="true"
+        style="background-image: url('./assets/img/horizontal-banner-beauty-products.jpg');">
+        <div class="filter"></div>
+    </div>
+    <div class="section profile-content">
+        <div class="container">
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper justify-content-center">
+                    <div class="row">
+                        <div class="col-lg-6"> <mat-card *ngIf="userUpdateForm">
+
+                                <mat-card-content>
+                                    <div class="row">
+                                        <div class="col"></div>
+                                        <button *ngIf="!editMode" mat-fab color="warn" aria-label="edit" (click)="setEditMode()">
+                                          <mat-icon>edit</mat-icon>
+                                        </button>
+                                      </div>
+                                    <form class="register-form" [formGroup]="userUpdateForm"
+                                        (ngSubmit)="onSubmitUpdate()">
+                                      
+                                                <mat-form-field class="example-full-width">
+                                                    <mat-label>Name</mat-label>
+                                                    <input matInput formControlName="name" placeholder="Name">
+                                                    <mat-error
+                                                        *ngIf="userUpdateForm.controls.name.hasError('required')">
+                                                        Name is <strong>required</strong>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                                <mat-form-field class="example-full-width">
+                                                    <mat-label>Surname</mat-label>
+                                                    <input  matInput formControlName="surname" placeholder="Surname">
+                                                    <mat-error
+                                                        *ngIf="userUpdateForm.controls.surname.hasError('required')">
+                                                        Surname is <strong>required</strong>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                                <mat-form-field class="example-full-width">
+                                                    <mat-label>Email</mat-label>
+                                                    <input type="email" matInput formControlName="email"
+                                                        placeholder="Ex. pat@example.com">
+                                                    <mat-error
+                                                        *ngIf="userUpdateForm.controls.email.hasError('email') && !userUpdateForm.controls.email.hasError('required')">
+                                                        Please enter a valid email address
+                                                    </mat-error>
+                                                    <mat-error
+                                                        *ngIf="userUpdateForm.controls.email.hasError('required')">
+                                                        Email is <strong>required</strong>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                         
+                                                <mat-form-field class="example-full-width">
+                                                    <mat-label>Phone:</mat-label>
+                                                    <input  matInput formControlName="phone" placeholder="07XXXXXXX">
+                                                    <mat-error
+                                                        *ngIf="userUpdateForm.controls.phone.hasError('required')">
+                                                        Phone is <strong>required</strong>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                         
+                                        <button type="submit" *ngIf="editMode" [disabled]="!userUpdateForm.valid" class="btn btn-block btn-round">Save changes</button>
+                                    </form>
+                                
+                                </mat-card-content>
+                            </mat-card></div>
+                        <div class="col-lg-6">
+                           
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

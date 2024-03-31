@@ -1,14 +1,12 @@
 package com.beautyzone.beautysalonapp.domain;
 
+import com.beautyzone.beautysalonapp.constants.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,6 +17,7 @@ import java.util.List;
 @Entity
 @Table
 public class User implements UserDetails {
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -27,10 +26,31 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private String phone;
-    private String status;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private List<Appointment> clientAppointments;
+
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "employee_service",
+            joinColumns = { @JoinColumn(name = "employee_id") },
+            inverseJoinColumns = { @JoinColumn(name = "service_id") }
+    )
+    private List<Service> services;
+
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "user_shift",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "shift_id") }
+    )
+    private List<Shift> shifts;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Appointment> employeeAppointments;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -66,4 +86,5 @@ public class User implements UserDetails {
     public String getPassword(){
         return password;
     }
+
 }
