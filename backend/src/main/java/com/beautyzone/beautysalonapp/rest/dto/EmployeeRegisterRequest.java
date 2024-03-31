@@ -1,6 +1,7 @@
-package com.beautyzone.beautysalonapp.auth;
+package com.beautyzone.beautysalonapp.rest.dto;
 
 import com.beautyzone.beautysalonapp.constants.Role;
+import com.beautyzone.beautysalonapp.constants.XRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,9 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterRequest {
 
-    private String firstname;
-    private String lastname;
+    private String name;
+    private String surname;
     private String email;
     private String password;
+    private String phone;
     private Role role;
 }
