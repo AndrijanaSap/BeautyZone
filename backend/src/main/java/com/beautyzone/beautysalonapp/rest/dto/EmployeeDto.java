@@ -8,4 +8,5 @@ import java.util.List;
 public class EmployeeDto {
     private Integer id;
     private String name;
+    private String surname;
 }

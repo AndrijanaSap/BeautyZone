@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { CategoryWithServicesDto } from '../models/category-with-services.model';
 import { CategoryDto } from '../models/category.model';
 
 @Injectable({
@@ -12,6 +13,9 @@ export class CategoryService {
   
   constructor(private http: HttpClient) {}
 
+  getAllCategoriesWithServices(): Observable<CategoryWithServicesDto[]> {
+    return this.http.get<CategoryWithServicesDto[]>(this.apiUrl + "/with-services");
+  }
   getAllCategories(): Observable<CategoryDto[]> {
     return this.http.get<CategoryDto[]>(this.apiUrl);
   }

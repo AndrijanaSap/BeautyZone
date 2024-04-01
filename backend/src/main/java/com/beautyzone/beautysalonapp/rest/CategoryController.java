@@ -18,10 +18,19 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping
+    @GetMapping("/with-services")
+    public ResponseEntity<?> findAllCategoriesWithServices() {
+        try {
+            return ResponseEntity.ok(categoryService.getAllWithServices());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+
+    @GetMapping()
     public ResponseEntity<?> findAllCategories() {
         try {
-            return ResponseEntity.ok(categoryService.findAll());
+            return ResponseEntity.ok(categoryService.getAll());
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }

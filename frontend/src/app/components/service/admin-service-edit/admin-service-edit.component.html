@@ -1,1 +1,107 @@
-<p>admin-service-edit works!</p>
+<div class="wrapper">
+    <div class="page-header page-header-xs" data-parallax="true"
+        style="background-image: url('./assets/img/horizontal-banner-beauty-products.jpg');">
+        <div class="filter"></div>
+    </div>
+    <div class="section profile-content">
+        <div class="container">
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper justify-content-center">
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-6 mr-auto ml-auto">
+                            <div class="card  mb-3">
+                                <h3 class="title">Edit service</h3>
+                                <form class="register-form" [formGroup]="updateForm" (ngSubmit)="onSubmit()">
+                                    <div class="row">
+                                        <div class="col">
+                                            <mat-form-field class="example-full-width" style="width: 100%;">
+                                                <mat-label>Name</mat-label>
+                                                <input matInput placeholder="Name" formControlName="name">
+                                            </mat-form-field>
+                                            <mat-form-field class="example-full-width" style="width: 100%;">
+                                                <mat-label>Price</mat-label>
+                                                <input matInput placeholder="Price" formControlName="price">
+                                            </mat-form-field>
+                                            <mat-form-field class="example-full-width" style="width: 100%;">
+                                                <mat-label>Duration in minutes</mat-label>
+                                                <input matInput placeholder="Duration in minutes"
+                                                    formControlName="durationInMinutes">
+                                            </mat-form-field>
+                                            <mat-form-field style="width: 100%;">
+                                                <mat-label>Category</mat-label>
+                                                <mat-select formControlName="category">
+                                                  <mat-option *ngFor="let category of allCategories" [value]="category.id">{{category?.name}}</mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                            <mat-form-field style="width: 100%;">
+                                                <mat-label>Employees</mat-label>
+                                                <mat-chip-grid #chipGrid aria-label="Job positions">
+                                                    <mat-chip-row *ngFor="let employee of employees"
+                                                        (removed)="remove(employee)">
+                                                        {{employee.name}}
+                                                        <button matChipRemove [attr.aria-label]="'remove ' + employee">
+                                                            <mat-icon>cancel</mat-icon>
+                                                        </button>
+                                                    </mat-chip-row>
+                                                </mat-chip-grid>
+                                                <input placeholder="Add employee..." #fruitInput
+                                                    [formControl]="fruitCtrl" [matChipInputFor]="chipGrid"
+                                                    [matAutocomplete]="auto"
+                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                    (matChipInputTokenEnd)="add($event)" />
+                                                <mat-autocomplete #auto="matAutocomplete"
+                                                    (optionSelected)="selected($event)">
+                                                    <mat-option
+                                                        *ngFor="let filteredEmployee of filteredEmployees | async"
+                                                        [value]="filteredEmployee">
+                                                        {{filteredEmployee.name + " " + filteredEmployee.surname}}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                            </mat-form-field>
+                                            <mat-form-field  style="width: 100%;">
+                                                <ngx-mat-file-input formControlName="imgPath">
+                                                    <mat-icon ngxMatFileInputIcon>folder</mat-icon>
+                                                </ngx-mat-file-input>
+                                             </mat-form-field>
+
+                                        </div>
+                                        <div class="col">
+                                            <img style="width: 100%" [src]="imgPath">
+                                            <mat-form-field style="width: 100%">
+                                                <mat-label>Description</mat-label>
+                                                <textarea matInput placeholder="Description"
+                                                    formControlName="description" cdkTextareaAutosize
+                                                    cdkAutosizeMaxRows="11"></textarea>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mr-auto ml-auto"><button type="submit"
+                                                [disabled]="!updateForm.valid" class="btn btn-round">Submit</button>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+
+                                    <!-- <mat-form-field class="example-full-width" style="width: 100%;">
+                                        <mat-label>Image</mat-label>
+                                        <input matInput type="file" formControlName="image">
+                                    </mat-form-field> -->
+                                    <!-- <img [src]="">
+
+                                 -->
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

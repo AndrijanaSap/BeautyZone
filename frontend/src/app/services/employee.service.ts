@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EmployeeDto } from '../models/employee.model';
-import { RegisterRequestDto } from '../models/register-request-dto.model';
-import { UserDto } from '../models/user.model';
 import { EmployeeRegisterDto } from '../models/employee-register-dto.model';
 import { EmployeeUpdateDto } from '../models/employee-update-dto.model';
 

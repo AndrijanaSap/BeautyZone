@@ -52,6 +52,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { AdminServiceAddComponent } from './components/service/admin-service-add/admin-service-add.component';
 import { AdminServiceEditComponent } from './components/service/admin-service-edit/admin-service-edit.component';
 import { AdminServiceListComponent } from './components/service/admin-service-list/admin-service-list.component';
+import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 
 @NgModule({
   declarations: [
@@ -106,6 +107,7 @@ import { AdminServiceListComponent } from './components/service/admin-service-li
     MatCheckboxModule,
     AsyncPipe,
     MatAutocompleteModule,
+    NgxMatFileInputModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {

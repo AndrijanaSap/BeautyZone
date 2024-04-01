@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 
-import { CategoryDto } from 'src/app/models/category.model';
+import { CategoryWithServicesDto } from 'src/app/models/category-with-services.model';
 import { CategoryService } from 'src/app/services/category.service';
 import { MatChipListboxChange, MatChipOption } from '@angular/material/chips';
 import { EmployeeDto } from 'src/app/models/employee.model';
@@ -47,7 +47,7 @@ export class CreateAppointmentComponent {
   availableTimeSlots: AvailabilityResponseDto[];
   daySlots: DaySlot[] = [];
   timeSlots: TimeSlot[];
-  categories: CategoryDto[];
+  categories: CategoryWithServicesDto[];
   employees: EmployeeDto[];
   minDate: Date;
   maxDate: Date;
@@ -99,7 +99,7 @@ export class CreateAppointmentComponent {
 
   async ngOnInit(): Promise<void> {
     const serviceId = Number(this.route.snapshot.queryParams['serviceId']);
-    this.categoryService.getAllCategories().subscribe(data => {
+    this.categoryService.getAllCategoriesWithServices().subscribe(data => {
       this.categories = data;
       if (serviceId) {
         this.appointmentsForm.get('service')?.patchValue(serviceId)

@@ -8,7 +8,7 @@ public class ServiceWithCategoryDto {
     private Integer id;
     private String name;
     private String description;
-    private String imgUrl;
+    private String imgPath;
     private Integer durationInMinutes;
     private Double price;
     private CategoryDto category;
