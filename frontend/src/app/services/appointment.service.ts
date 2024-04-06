@@ -3,20 +3,29 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CreateAppointmentRequestDto } from '../models/createAppointmentRequest.model';
 import { CreateAppointmentResponseDto } from '../models/createAppointmentResponse.model';
-import { AppointmentResponseDto } from '../models/appointment-response-dto.model';
+import { AppointmentWithEmployeeResponseDto } from '../models/appointment-with-employee-response-dto.model';
 import { AppointmentDto } from '../models/appointment.model';
+import { AppointmentWithClientResponseDto } from '../models/appointment-with-client-response-dto.model';
+
+
+interface Holiday {
+  date: string;
+  localName: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppointmentService {
+  private countryCode = 'mk';
 
   private apiUrl = 'http://localhost:8080/api/v1/appointments';
+  private holidayUrl = 'https://date.nager.at/api/v1/get/'+ this.countryCode +'/2024';
 
   constructor(private http: HttpClient) { }
 
-  createAppointment(createAppointmentRequestDto: CreateAppointmentRequestDto): Observable<AppointmentResponseDto> {
-    return this.http.post<AppointmentResponseDto>(this.apiUrl + '/createAppointment', createAppointmentRequestDto);
+  createAppointment(createAppointmentRequestDto: CreateAppointmentRequestDto): Observable<AppointmentWithEmployeeResponseDto> {
+    return this.http.post<AppointmentWithEmployeeResponseDto>(this.apiUrl + '/createAppointment', createAppointmentRequestDto);
   }
 
   async calculateSignature(paramsMap: Map<string, string>): Promise<string | undefined> {
@@ -25,11 +34,19 @@ export class AppointmentService {
       JSON.stringify(Object.fromEntries(paramsMap)), { headers: headers }).toPromise();
   }
 
-  getAppointmentById(id: string): Observable<AppointmentResponseDto> {
-    return this.http.get<AppointmentResponseDto>(`${this.apiUrl}/${id}`);
+  getAppointmentById(id: string): Observable<AppointmentWithEmployeeResponseDto> {
+    return this.http.get<AppointmentWithEmployeeResponseDto>(`${this.apiUrl}/${id}`);
   }
 
-  getAllAppointmentByClientId(id: string): Observable<AppointmentResponseDto[]> {
-    return this.http.get<AppointmentResponseDto[]>(`${this.apiUrl}/getAllByClientId/${id}`);
+  getAllAppointmentByClientId(id: string): Observable<AppointmentWithEmployeeResponseDto[]> {
+    return this.http.get<AppointmentWithEmployeeResponseDto[]>(`${this.apiUrl}/getAllByClientId/${id}`);
+  }
+
+  getAllAppointmentByEmployeeId(id: string): Observable<AppointmentWithClientResponseDto[]> {
+    return this.http.get<AppointmentWithClientResponseDto[]>(`${this.apiUrl}/getAllByEmployeeId/${id}`);
+  }
+
+  getHolidays(): Observable<Holiday[]> {
+    return this.http.get<Holiday[] >(this.holidayUrl);
   }
 }

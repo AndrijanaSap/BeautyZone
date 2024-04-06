@@ -5,8 +5,8 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface TimeSlotMapper {
-//    Appointment AppointmentResponseDtoToAppointment(AppointmentResponseDto appointmentResponseDto);
+//    Appointment AppointmentWithEmployeeResponseDtoToAppointment(AppointmentWithEmployeeResponseDto appointmentResponseDto);
 //    @Mapping(target = "category", source = "category", ignore = true) // Ignore the field 'category'
-//    AppointmentResponseDto timeSlotToAppointmentResponseDto(Timeslot appointment);
+//    AppointmentWithEmployeeResponseDto timeSlotToAppointmentWithEmployeeResponseDto(Timeslot appointment);
 //    List<ServiceDto> servicesToServiceDtos(List<Service> services);
 }

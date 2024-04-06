@@ -23,7 +23,7 @@ import { DaySlot } from 'src/app/models/daySlot.model';
 import { CombinationDto } from 'src/app/models/combination.model';
 import { CreateAppointmentRequestDto } from 'src/app/models/createAppointmentRequest.model';
 import { TimeslotService } from 'src/app/services/timeslot.service';
-import { AppointmentResponseDto } from 'src/app/models/appointment-response-dto.model';
+import { AppointmentWithEmployeeResponseDto } from 'src/app/models/appointment-with-employee-response-dto.model';
 
 @Component({
   selector: 'app-create-appointment',
@@ -99,6 +99,7 @@ export class CreateAppointmentComponent {
 
   async ngOnInit(): Promise<void> {
     const serviceId = Number(this.route.snapshot.queryParams['serviceId']);
+
     this.categoryService.getAllCategoriesWithServices().subscribe(data => {
       this.categories = data;
       if (serviceId) {
@@ -106,9 +107,12 @@ export class CreateAppointmentComponent {
       }
     });
 
-    this.employeeService.getEmployeesByServiceId(serviceId).subscribe(data => {
-      this.employees = data;
-    });
+    if(serviceId){
+      this.employeeService.getEmployeesByServiceId(serviceId).subscribe(data => {
+        this.employees = data;
+      });
+    }
+    
   }
 
 
@@ -199,7 +203,7 @@ export class CreateAppointmentComponent {
 
   }
 
-  private async redirectToPaymentGateway(appointmentResponseDto: AppointmentResponseDto) {
+  private async redirectToPaymentGateway(appointmentResponseDto: AppointmentWithEmployeeResponseDto) {
     var paramsMap = new Map();
     paramsMap.set("key", "c1L9yX1yrEEkQVGu2fBz5hImz");
 

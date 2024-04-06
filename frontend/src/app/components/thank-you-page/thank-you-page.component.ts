@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AppointmentResponseDto } from 'src/app/models/appointment-response-dto.model';
+import { AppointmentWithEmployeeResponseDto } from 'src/app/models/appointment-with-employee-response-dto.model';
 import { AppointmentDto } from 'src/app/models/appointment.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 
@@ -10,7 +10,7 @@ import { AppointmentService } from 'src/app/services/appointment.service';
   styleUrls: ['./thank-you-page.component.css']
 })
 export class ThankYouPageComponent implements OnInit {
-  appointment: AppointmentResponseDto;
+  appointment: AppointmentWithEmployeeResponseDto;
   constructor(public route: ActivatedRoute, private appointmentService: AppointmentService,) {}
   
   ngOnInit(): void {

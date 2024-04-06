@@ -1,3 +1,5 @@
+import { CategoryDto } from "./category.model";
+
 export interface ServiceDto {
     id: number;
     name: string;
@@ -5,6 +7,7 @@ export interface ServiceDto {
     imgPath: string;
     durationInMinutes: number;
     price: number;
+    category: CategoryDto;
   }
 
   export class ServiceDto {
@@ -14,4 +17,5 @@ export interface ServiceDto {
     imgPath: string;
     durationInMinutes: number;
     price: number;
+    category: CategoryDto;
   }

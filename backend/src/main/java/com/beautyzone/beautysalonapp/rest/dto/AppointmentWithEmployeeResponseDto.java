@@ -1,13 +1,12 @@
 package com.beautyzone.beautysalonapp.rest.dto;
 import com.beautyzone.beautysalonapp.constants.AppointmentStatus;
 //import com.beautyzone.beautysalonapp.domain.Employee;
-import com.beautyzone.beautysalonapp.domain.Service;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class AppointmentResponseDto {
+public class AppointmentWithEmployeeResponseDto {
     private Integer id;
     private String paymentMethod;
     private ServiceDto service;

@@ -34,6 +34,7 @@ public class Appointment {
     private String phoneNumber;
     private String email;
     private String note;
+    private String ipAddress;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime appointmentDateTime;

@@ -17,6 +17,10 @@ import { EmployeeAddComponent } from './components/employee/employee-add/employe
 import { AdminServiceListComponent } from './components/service/admin-service-list/admin-service-list.component';
 import { AdminServiceAddComponent } from './components/service/admin-service-add/admin-service-add.component';
 import { AdminServiceEditComponent } from './components/service/admin-service-edit/admin-service-edit.component';
+import { EmployeeAppointmentListComponent } from './components/appointment/employee-appointment-list/employee-appointment-list.component';
+import { CategoryAddComponent } from './components/category/category-add/category-add.component';
+import { CategoryEditComponent } from './components/category/category-edit/category-edit.component';
+import { CategoryListComponent } from './components/category/category-list/category-list.component';
 
 
 const routes: Routes =[
@@ -26,7 +30,7 @@ const routes: Routes =[
   { path: 'services/:id', component: ServiceDetailsComponent },
   { path: 'add-service', component: AdminServiceAddComponent },
   { path: 'edit-service/:id', component: AdminServiceEditComponent },
-  { path: 'appointments', component: CreateAppointmentComponent },
+  { path: 'create-appointment', component: CreateAppointmentComponent },
   { path: 'thank-you/:appointmentId', component: ThankYouPageComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
@@ -36,6 +40,10 @@ const routes: Routes =[
   { path: 'add-employee', component: EmployeeAddComponent },
   { path: 'edit-employee/:id', component: EmployeeEditComponent },
   { path: 'admin-services', component: AdminServiceListComponent },
+  { path: 'employee-appointments', component: EmployeeAppointmentListComponent},
+  { path: 'add-category', component: CategoryAddComponent },
+  { path: 'edit-category/:id', component: CategoryEditComponent },
+  { path: 'categories', component: CategoryListComponent }
 ];
 
 

@@ -110,7 +110,7 @@ export class NavbarComponent implements OnInit {
         if (titlee.charAt(0) === '#') {
             titlee = titlee.slice(1);
         }
-        if (titlee.startsWith('/services')) {
+        if (titlee.endsWith('/services')) {
             return true;
         }
         else {

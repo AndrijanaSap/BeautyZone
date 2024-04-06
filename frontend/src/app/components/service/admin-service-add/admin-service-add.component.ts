@@ -38,9 +38,7 @@ export class AdminServiceAddComponent {
     description: new FormControl("", [
       Validators.required
     ]),
-    category: new FormControl(0, [
-      Validators.required
-    ]),
+    category: new FormControl(0),
   });
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fruitCtrl = new FormControl('');

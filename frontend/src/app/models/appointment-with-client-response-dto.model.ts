@@ -1,11 +1,12 @@
 import { EmployeeDto } from "./employee.model";
 import { ServiceDto } from "./service.model";
+import { UserDto } from "./user.model";
 
-export interface AppointmentResponseDto {
+export interface AppointmentWithClientResponseDto {
   id: number;
   paymentMethod: string;
   service: ServiceDto;
-  employee:EmployeeDto;
+  client:UserDto;
   name: string;
   phoneNumber: string;
   email: string;
@@ -14,6 +15,6 @@ export interface AppointmentResponseDto {
   appointmentStatus: string;
   }
 
-  export class AppointmentResponseDto implements AppointmentResponseDto{
+  export class AppointmentWithClientResponseDto implements AppointmentWithClientResponseDto{
 
   }

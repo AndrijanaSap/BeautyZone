@@ -61,7 +61,8 @@ public class ServiceService {
                 .durationInMinutes(request.getDurationInMinutes())
                 .imgPath(request.getImgPath())
                 .description(request.getDescription())
-                .category(categoryRepository.findById(request.getCategoryId()).orElseThrow(() -> new NoSuchElementException("Category with id: " + request.getCategoryId() + " doesnt exists.")))
+                .category(request.getCategoryId() != null ?
+                        categoryRepository.findById(request.getCategoryId()).orElseThrow(() -> new NoSuchElementException("Category with id: " + request.getCategoryId() + " doesnt exists.")) : null)
                 .employees(employeeRepository.findAllById(request.getEmployees()))
                 .build();
 
@@ -77,7 +78,7 @@ public class ServiceService {
         }
         serviceRepository.save(service);
 
-        return  service.getId();
+        return service.getId();
     }
 
     public void updateService(ServiceUpdateRequestDto serviceUpdateRequestDto, MultipartFile img) throws IOException {

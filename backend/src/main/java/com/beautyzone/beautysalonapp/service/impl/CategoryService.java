@@ -1,21 +1,25 @@
 package com.beautyzone.beautysalonapp.service.impl;
 
 import com.beautyzone.beautysalonapp.domain.Category;
+import com.beautyzone.beautysalonapp.exception.NoSuchElementException;
 import com.beautyzone.beautysalonapp.repository.CategoryRepository;
-import com.beautyzone.beautysalonapp.rest.dto.CategoryDto;
-import com.beautyzone.beautysalonapp.rest.dto.CategoryWithServicesDto;
-import com.beautyzone.beautysalonapp.rest.dto.CategoryWithServicesWithEmployeesDto;
+import com.beautyzone.beautysalonapp.repository.ServiceRepository;
+import com.beautyzone.beautysalonapp.rest.dto.*;
 import com.beautyzone.beautysalonapp.rest.mapper.CategoryMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ServiceRepository serviceRepository;
     private final CategoryMapper categoryMapper;
 
     public List<CategoryDto> getAll() throws Exception {
@@ -32,5 +36,49 @@ public class CategoryService {
             throw new Exception("No category found!");
         }
         return categoryMapper.categoriesToCategoryWithServicesDtos(categories);
+    }
+
+    public CategoryWithServicesDto getCategoryWithServicesById(Integer id) {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Category not found with id: " + id));
+        return categoryMapper.categoryToCategoryWithServicesDto(category);
+    }
+    public Integer addCategory(CategoryUpdateRequestDto request) throws IOException {
+        ;
+        var category = Category.builder()
+                .name(request.getName())
+                .jobPosition(request.getJobPosition())
+                .build();
+
+        categoryRepository.save(category);
+
+        List<com.beautyzone.beautysalonapp.domain.Service> services = serviceRepository.findAllById(request.getServices());
+        services.forEach(i -> i.setCategory(category));
+        serviceRepository.saveAll(services);
+
+        return  category.getId();
+    }
+
+    public void updateCategory(CategoryUpdateRequestDto requestDto) throws IOException {
+        Category category = categoryRepository.findById(requestDto.getId()).orElseThrow(() -> new UsernameNotFoundException("Category not found"));
+        category.setName(requestDto.getName());
+        category.setJobPosition(requestDto.getJobPosition());
+        categoryRepository.save(category);
+
+        List<com.beautyzone.beautysalonapp.domain.Service> services = serviceRepository.findAllById(requestDto.getServices());
+        services.forEach(i -> i.setCategory(category));
+        serviceRepository.saveAll(services);
+
+    }
+
+    public boolean deleteCategoryById(Integer id) {
+        try {
+            Category category = categoryRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Category not found"));
+            category.getServices().forEach(i -> i.setCategory(null));
+            categoryRepository.save(category);
+            categoryRepository.deleteById(id);
+        } catch (Exception e) {
+            return false;
+        }
+        return !categoryRepository.existsById(id);
     }
 }

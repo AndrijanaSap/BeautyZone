@@ -10,11 +10,13 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private String jobPosition;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     private List<Service> services;
 }

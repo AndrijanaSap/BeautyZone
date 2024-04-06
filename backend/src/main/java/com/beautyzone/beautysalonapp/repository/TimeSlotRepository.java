@@ -1,6 +1,7 @@
 package com.beautyzone.beautysalonapp.repository;
 
 import com.beautyzone.beautysalonapp.domain.Timeslot;
+import com.beautyzone.beautysalonapp.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -51,5 +52,7 @@ public interface TimeSlotRepository extends JpaRepository<Timeslot, Integer> {
             "ORDER BY DATE(t.start_time), t.employee_id, t.start_time", nativeQuery = true)
     List<Timeslot> findByStartTimeBetweenAndTimeSlotTypeAndEmployeeIdInOrderByEmployeeAscStartTimeAsc(
             LocalDateTime startTime, LocalDateTime endTime, String timeSlotType, List<Integer> employeeIds);
+
+    Timeslot findByEmployeeAndStartTimeAndEndTime(User employee, LocalDateTime startTime, LocalDateTime endTime);
 
 }

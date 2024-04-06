@@ -11,7 +11,23 @@
                 <div class="col-md-6">
                    <h1> {{ service.name }} </h1>
                    <p> {{ service.description }}</p>
-                   <button class="btn btn-primary btn-round" routerLink="/appointments" [queryParams]="{serviceId: service.id}">Make an appointment</button>
+                   <br>
+                   <div class="row align-items-center">
+                    <div class="col-lg-4">
+                        <p>Duration:</p>
+                        <p> {{ service.durationInMinutes }} min </p>
+                    </div>
+                    <div class="col-lg-4" style="border-left: 1px solid lightgrey;border-right: 1px solid lightgrey;">
+                        <p>Category:</p>
+                        <p> {{ service.category.name }} </p>
+                    </div>
+                    <div class="col-lg-4">
+                        <p>Price:</p>
+                        <p> {{ service.price | currency: 'EUR' }}</p>
+                    </div>
+                </div>
+                <br>
+                   <button class="btn btn-primary btn-round" routerLink="/create-appointment" [queryParams]="{serviceId: service.id}">Make an appointment</button>
                 </div>
             </div>
         </div>

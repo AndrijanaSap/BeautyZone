@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AppointmentResponseDto } from 'src/app/models/appointment-response-dto.model';
+import { AppointmentWithEmployeeResponseDto } from 'src/app/models/appointment-with-employee-response-dto.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 
 
@@ -22,7 +22,7 @@ export interface ClientAppointmentDto {
 export class ClientAppointmentListComponent {
 
   displayedColumns: string[] = ['id', 'clientName', 'dateTime', 'service', 'amount', 'employee', 'paymentMethod', 'status', 'note'];
-  dataSource :AppointmentResponseDto[];
+  dataSource :AppointmentWithEmployeeResponseDto[];
 
   constructor(private appointmentService: AppointmentService) {
   }

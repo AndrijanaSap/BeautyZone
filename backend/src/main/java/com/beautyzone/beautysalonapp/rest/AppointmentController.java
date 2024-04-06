@@ -28,6 +28,15 @@ public class AppointmentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
+
+    @GetMapping("/getAllByEmployeeId/{employeeId}")
+    public ResponseEntity<?> getAllByEmployeeId(@PathVariable Integer employeeId) {
+        try {
+            return ResponseEntity.ok(appointmentService.findAllByEmployeeId(employeeId));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
     @GetMapping("/{appointmentId}")
     public ResponseEntity<?> getAppointmentById(@PathVariable Integer appointmentId) {
         try {

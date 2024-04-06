@@ -9,5 +9,6 @@ import java.util.List;
 public class CategoryWithServicesDto {
     private Integer id;
     private String name;
+    private String jobPosition;
     private List<ServiceDto> services;
 }

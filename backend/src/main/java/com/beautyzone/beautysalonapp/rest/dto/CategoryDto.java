@@ -9,4 +9,5 @@ import java.util.List;
 public class CategoryDto {
     private Integer id;
     private String name;
+    private String jobPosition;
 }

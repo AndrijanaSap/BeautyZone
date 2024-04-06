@@ -53,16 +53,22 @@ public class AppointmentService {
     private final AppointmentMapper appointmentMapper;
     private final int timeSlotUnitInMinutes = 30;
 
-    public AppointmentResponseDto findById(Integer id) {
-        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Appointment with id: " + id + "not found." ));
-        return appointmentMapper.appointmentToAppointmentResponseDto(appointment);
+    public AppointmentWithEmployeeResponseDto findById(Integer id) {
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Appointment with id: " + id + "not found."));
+        return appointmentMapper.appointmentToAppointmentWithEmployeeResponseDto(appointment);
     }
 
-    public List<AppointmentResponseDto> findAllByClientId(Integer id) {
+    public List<AppointmentWithEmployeeResponseDto> findAllByClientId(Integer id) {
         List<Appointment> appointments = appointmentRepository.findAllByClient_Id(id);
-        return appointmentMapper.appointmentsToAppointmentResponseDtos(appointments);
+        return appointmentMapper.appointmentsToAppointmentWithEmployeeResponseDtos(appointments);
     }
-    public AppointmentResponseDto createAppointment(AppointmentRequestDto appointmentRequestDto) {
+
+    public List<AppointmentWithClientResponseDto> findAllByEmployeeId(Integer id) {
+        List<Appointment> appointments = appointmentRepository.findAllByEmployee_Id(id);
+        return appointmentMapper.appointmentsToAppointmentWithClientResponseDtos(appointments);
+    }
+
+    public AppointmentWithEmployeeResponseDto createAppointment(AppointmentRequestDto appointmentRequestDto) {
         try {
             List<Timeslot> timeslots = timeSlotRepository.findAllById(appointmentRequestDto.getTimeSlotIds());
 
@@ -78,14 +84,16 @@ public class AppointmentService {
             appointment.setEmployee(employeeRepository.getReferenceById(appointmentRequestDto.getEmployeeId()));
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            User client = ((User) authentication.getPrincipal());
-            appointment.setClient(client);
+            if (!authentication.getPrincipal().equals("anonymousUser")) {
+                User client = ((User) authentication.getPrincipal());
+                appointment.setClient(client);
+            }
 
             if (appointmentRequestDto.getPaymentMethod().equals(PaymentMethod.CASH.toString())) {
                 appointment.setAppointmentStatus(AppointmentStatus.RESERVED);
-            } else if(appointmentRequestDto.getPaymentMethod().equals(PaymentMethod.CARD.toString())){
+            } else if (appointmentRequestDto.getPaymentMethod().equals(PaymentMethod.CARD.toString())) {
                 appointment.setAppointmentStatus(AppointmentStatus.WAITING_FOR_PAYMENT);
-            } else  {
+            } else {
                 throw new NoSuchElementException("Unknown payment method type");
             }
 
@@ -105,7 +113,7 @@ public class AppointmentService {
             appointment.setTimeslots(timeslots);
             appointmentDb = appointmentRepository.save(appointment);
 
-            return appointmentMapper.appointmentToAppointmentResponseDto(appointmentDb);
+            return appointmentMapper.appointmentToAppointmentWithEmployeeResponseDto(appointmentDb);
         } catch (Exception e) {
             return null;
         }
@@ -138,20 +146,20 @@ public class AppointmentService {
     public int handleSuccessfulPayment(IpgResponseDto ipgResponseDto) throws Exception {
         int appointmentId = Integer.parseInt(ipgResponseDto.getOrderNumber().replace("-test", ""));
         Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() -> new NoSuchElementException("Appointment with id " + appointmentId + " has not be found: "));
-        if (appointment.getAppointmentStatus().equals(AppointmentStatus.WAITING_FOR_PAYMENT)){
+        if (appointment.getAppointmentStatus().equals(AppointmentStatus.WAITING_FOR_PAYMENT)) {
             appointment.setAppointmentStatus(AppointmentStatus.PAID);
             return appointmentId;
-        }
-        else throw new Exception("Expected appointment status is " + AppointmentStatus.WAITING_FOR_PAYMENT + " ,but we got " + appointment.getAppointmentStatus() + " ");
+        } else
+            throw new Exception("Expected appointment status is " + AppointmentStatus.WAITING_FOR_PAYMENT + " ,but we got " + appointment.getAppointmentStatus() + " ");
     }
 
     public int handleCanceledPayment(IpgResponseDto ipgResponseDto) throws Exception {
         int appointmentId = Integer.parseInt(ipgResponseDto.getOrderNumber().replace("-test", ""));
         Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() -> new NoSuchElementException("Appointment with id " + appointmentId + " has not be found: "));
-        if (appointment.getAppointmentStatus().equals(AppointmentStatus.WAITING_FOR_PAYMENT)){
+        if (appointment.getAppointmentStatus().equals(AppointmentStatus.WAITING_FOR_PAYMENT)) {
             appointment.setAppointmentStatus(AppointmentStatus.PAID);
             return appointmentId;
-        }
-        else throw new Exception("Expected appointment status is " + AppointmentStatus.WAITING_FOR_PAYMENT + " ,but we got " + appointment.getAppointmentStatus() + " ");
+        } else
+            throw new Exception("Expected appointment status is " + AppointmentStatus.WAITING_FOR_PAYMENT + " ,but we got " + appointment.getAppointmentStatus() + " ");
     }
 }

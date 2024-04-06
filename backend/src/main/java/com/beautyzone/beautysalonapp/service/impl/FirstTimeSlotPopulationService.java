@@ -34,14 +34,15 @@ public class FirstTimeSlotPopulationService {
 
                 // Loop from start to end in 30-minute intervals
                 while (startDateTime.isBefore(endDateTime)) {
-                    Timeslot timeSlot = new Timeslot();
+                    if (timeSlotRepository.findByEmployeeAndStartTimeAndEndTime(employee, startDateTime, endDateTime) == null){
+                        Timeslot timeSlot = new Timeslot();
                         timeSlot.setEmployee(employee);
                         timeSlot.setCreationTime(LocalDateTime.now());
                         timeSlot.setStartTime(startDateTime);
                         timeSlot.setEndTime(startDateTime.plusMinutes(30));
                         timeSlot.setTimeSlotType(TimeSlotType.AVAILABLE);
                         timeSlotRepository.save(timeSlot);
-
+                    }
                     // Move to the next 30-minute interval
                     startDateTime = startDateTime.plusMinutes(30);
                 }

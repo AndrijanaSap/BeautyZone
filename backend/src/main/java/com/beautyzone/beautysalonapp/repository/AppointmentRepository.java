@@ -12,4 +12,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 
     List<Appointment> findAllByClient_Id(Integer clientId);
 
+    List<Appointment> findAllByEmployee_Id(Integer employeeId);
+
 }
