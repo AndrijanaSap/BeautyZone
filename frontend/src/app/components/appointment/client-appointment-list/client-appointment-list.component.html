@@ -28,7 +28,7 @@
 
                                 <ng-container matColumnDef="dateTime">
                                     <th mat-header-cell *matHeaderCellDef> Appointment date and time </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.appointmentDateTime}} </td>
+                                    <td mat-cell *matCellDef="let element"> {{element.appointmentDateTime | date: 'dd.MM.yyyy HH:mm'}} </td>
                                 </ng-container>
 
                                 <ng-container matColumnDef="service">

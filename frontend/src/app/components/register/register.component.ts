@@ -14,6 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class RegisterComponent {
   hide = true;
+  ipv4: any;
   registerForm = new FormGroup({
     email: new FormControl("", [
       Validators.required
@@ -38,6 +39,10 @@ export class RegisterComponent {
   }
 
 
+  ngOnInit(): void {
+    this.userService.getIp().subscribe(data => this.ipv4 = data.IPv4);
+    }
+
   onSubmitRegister() {
     var registerRequestDto: RegisterRequestDto = new RegisterRequestDto();
 
@@ -55,6 +60,8 @@ export class RegisterComponent {
 
     if (this.registerForm.controls.phone.value)
       registerRequestDto.phone = this.registerForm.controls.phone.value;
+
+    registerRequestDto.ipAddress = this.ipv4;
 
     this.authenticationService.register(registerRequestDto).subscribe(response => {
       localStorage.setItem("token", response.token);

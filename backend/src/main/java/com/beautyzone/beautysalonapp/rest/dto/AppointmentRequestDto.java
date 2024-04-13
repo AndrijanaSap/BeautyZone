@@ -12,6 +12,7 @@ public class AppointmentRequestDto {
     private List<Integer> timeSlotIds;
 
     // Appointment data
+    private String id;
     private String paymentMethod;
     private Integer serviceId;
     private Integer employeeId;

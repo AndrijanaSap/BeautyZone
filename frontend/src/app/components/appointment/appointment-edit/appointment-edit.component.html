@@ -1,0 +1,149 @@
+<div class="wrapper">
+    <div class="page-header page-header-xs" data-parallax="true"
+        style="background-image: url('./assets/img/horizontal-banner-beauty-products.jpg');">
+        <div class="filter"></div>
+    </div>
+    <div class="section profile-content">
+        <div class="container">
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper justify-content-center">
+                    <div class="row">
+                        <div class="col mr-auto ml-auto">
+                            <h3 class="title">Edit appointment</h3>
+                            <mat-stepper orientation="vertical" linear="true" #stepper>
+                                <mat-step [stepControl]="appointmentForm">
+
+                                    <ng-template matStepLabel>Choose an appointment</ng-template>
+                                    <div class="row" style="margin-top: 5%;margin-bottom: 3%;">
+                                        <form [formGroup]="appointmentsForm" (ngSubmit)="onSubmitCheckAvailability()"
+                                            class="form-inline" style="width: -webkit-fill-available;">
+                                            <div class="col-md-3" *ngIf="categories">
+                                                <mat-form-field appearance="fill"
+                                                    style="width: -webkit-fill-available;">
+                                                    <mat-label>Service</mat-label>
+                                                    <mat-select formControlName="service"
+                                                        (selectionChange)="getEmployeesByServiceId($event.value)">
+                                                        <mat-option>-- None --</mat-option>
+                                                        <mat-optgroup *ngFor="let category of categories"
+                                                            [label]="category.name">
+                                                            <mat-option *ngFor="let service of category.services"
+                                                                [value]="service.id">
+                                                                {{service.name}}
+                                                            </mat-option>
+                                                        </mat-optgroup>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field>
+                                                    <mat-label>Enter a date range</mat-label>
+                                                    <mat-date-range-input [min]="minDate" [max]="maxDate"
+                                                        formGroupName="range" [rangePicker]="picker">
+                                                        <input matStartDate formControlName="start"
+                                                            placeholder="Start date">
+                                                        <input matEndDate formControlName="end" placeholder="End date">
+                                                    </mat-date-range-input>
+                                                    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                                                    <mat-datepicker-toggle matIconSuffix
+                                                        [for]="picker"></mat-datepicker-toggle>
+                                                    <mat-date-range-picker #picker></mat-date-range-picker>
+
+                                                    <mat-error
+                                                        *ngIf="appointmentsForm.controls.range.controls.start.hasError('matStartDateInvalid')">Invalid
+                                                        start date</mat-error>
+                                                    <mat-error
+                                                        *ngIf="appointmentsForm.controls.range.controls.end.hasError('matEndDateInvalid')">Invalid
+                                                        end date</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3" *ngIf="employees">
+                                                <mat-form-field>
+                                                    <mat-label>Employee</mat-label>
+                                                    <mat-select formControlName="employee">
+                                                        <mat-option>Any</mat-option>
+                                                        <mat-option *ngFor="let employee of employees"
+                                                            [value]="employee.id">
+                                                            {{employee.name}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3"> <button mat-raised-button color="primary"
+                                                    type="submit" [disabled]="!appointmentsForm.valid">Check
+                                                    availability</button></div>
+
+                                        </form>
+                                    </div>
+                                    <div class="row" *ngIf="availableTimeSlots">
+                                        <div class="col-lg-12">
+                                            <div>
+                                                <mat-accordion class="example-headers-align" multi>
+                                                    <mat-expansion-panel
+                                                        *ngFor="let availableTimeSlot of availableTimeSlots"
+                                                        expanded="true">
+                                                        <mat-expansion-panel-header>
+                                                            <mat-panel-title>
+                                                                {{ availableTimeSlot.date | date: 'dd.MM' }}
+                                                            </mat-panel-title>
+                                                        </mat-expansion-panel-header>
+
+                                                        <mat-chip-listbox aria-label="Available time slots"
+                                                            (change)="print($event)">
+                                                            <mat-chip-option
+                                                                *ngFor="let combinationDto of availableTimeSlot.combinationDtos"
+                                                                [value]="combinationDto"
+                                                                [selected]="appointmentsForm.pristine && combinationDto.startDateTime === appointment.appointmentDateTime"
+                                                                (selectionChange)="print2($event)">
+                                                                {{ combinationDto.startDateTime | date: 'HH:mm'
+                                                                }}</mat-chip-option>
+                                                        </mat-chip-listbox>
+
+
+                                                    </mat-expansion-panel>
+
+                                                </mat-accordion>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button mat-button matStepperNext>Next</button>
+                                    </div>
+                                </mat-step>
+                                <mat-step [stepControl]="personalInfoForm" label="Fill out your personal info">
+                                    <form [formGroup]="personalInfoForm" (ngSubmit)="onSubmitUpdateAppointment()">
+                                        <div class="row" style="margin-top: 5%;margin-bottom: 5%">
+                                            <div class="col-md-3"> <mat-form-field>
+                                                    <mat-label>Name and surname</mat-label>
+                                                    <input matInput formControlName="name">
+                                                </mat-form-field></div>
+                                            <div class="col-md-3"> <mat-form-field>
+                                                    <mat-label>Phone number</mat-label>
+                                                    <input matInput formControlName="phoneNumber">
+                                                </mat-form-field></div>
+                                            <div class="col-md-3"> <mat-form-field>
+                                                    <mat-label>Email</mat-label>
+                                                    <input matInput formControlName="email">
+                                                </mat-form-field></div>
+                                            <div class="col-md-3"> <mat-form-field>
+                                                    <mat-label>Note</mat-label>
+                                                    <input matInput formControlName="note">
+                                                </mat-form-field></div>
+                                        </div>
+
+                                        <div>
+
+                                            <button mat-button matStepperPrevious>Back</button>
+                                            <button mat-button type="submit" color="primary"
+                                                [disabled]="appointmentForm.invalid || personalInfoForm.invalid">Submit</button>
+                                        </div>
+                                    </form>
+                                </mat-step>
+                            </mat-stepper>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

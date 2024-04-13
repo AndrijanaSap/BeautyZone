@@ -2,9 +2,9 @@ import { Component, Directive, EventEmitter, Input, Output, QueryList, ViewChild
 import { Router } from '@angular/router';
 import { EmployeeDto } from 'src/app/models/employee.model';
 import { EmployeeService } from 'src/app/services/employee.service';
-import { NgbdSortableHeaderEmployee, SortEventEmployee } from '../ngbd-sortable-header-employee.directive';
+import { NgbdSortableHeader, SortEvent } from '../../../shared/directives/ngbd-sortable-header.directive';
 
-const compare = (v1: any, v2:any) => (v1 < v2 ? -1 : v1 > v2 ? 1 : 0);
+const compare = (v1: string, v2:string) => (v1 < v2 ? -1 : v1 > v2 ? 1 : 0);
 
 @Component({
   selector: 'app-employee-list',
@@ -12,7 +12,7 @@ const compare = (v1: any, v2:any) => (v1 < v2 ? -1 : v1 > v2 ? 1 : 0);
   styleUrls: ['./employee-list.component.css']
 })
 export class EmployeeListComponent {
-  @ViewChildren(NgbdSortableHeaderEmployee) headers: QueryList<NgbdSortableHeaderEmployee>;
+  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
   displayedColumns: string[] = ['id', 'name', 'surname', 'phone', 'email', 'services', 'actions'];
   dataSource: EmployeeDto[];
   initialDataSource: EmployeeDto[];
@@ -28,7 +28,7 @@ export class EmployeeListComponent {
   }
 
 
-	onSort({ column, direction }: SortEventEmployee) {
+	onSort({ column, direction }: SortEvent) {
 		// resetting other headers
 		this.headers.forEach((header) => {
 			if (header.sortable !== column) {

@@ -10,6 +10,7 @@ public class UserDto {
     private String email;
     private String phone;
     private String role;
+    private String ipAddress;
 
     public UserDto(){
     }

@@ -27,11 +27,13 @@ public class User implements UserDetails {
     private String password;
     private String phone;
     private String quote;
+    private String ipAddress;
+    private Boolean showOnHome;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointment> clientAppointments;
 
     @ManyToMany(cascade = { CascadeType.ALL })
@@ -50,7 +52,7 @@ public class User implements UserDetails {
     )
     private List<Shift> shifts;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Appointment> employeeAppointments;
 
     @Override

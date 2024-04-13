@@ -21,7 +21,7 @@ import { AvailabilityResponseDto } from 'src/app/models/availabilityResponse.mod
 import { TimeSlot } from 'src/app/models/timeSlot.model';
 import { DaySlot } from 'src/app/models/daySlot.model';
 import { CombinationDto } from 'src/app/models/combination.model';
-import { CreateAppointmentRequestDto } from 'src/app/models/createAppointmentRequest.model';
+import { CreateUpdateAppointmentRequestDto } from 'src/app/models/create-update-appointment-request-dto.model';
 import { TimeslotService } from 'src/app/services/timeslot.service';
 import { AppointmentWithEmployeeResponseDto } from 'src/app/models/appointment-with-employee-response-dto.model';
 
@@ -140,6 +140,10 @@ export class CreateAppointmentComponent {
       appointmentRequestDto.serviceId = this.appointmentsForm.controls.service.value;
     }
 
+    if (this.appointmentsForm.controls.employee.value) {
+      appointmentRequestDto.employeeId = this.appointmentsForm.controls.employee.value;
+    }
+
     // let newAppointment: AppointmentDto;
     // newAppointment = new AppointmentDto();
     // if(this.appointmentsForm.controls.employee.value) {
@@ -151,31 +155,28 @@ export class CreateAppointmentComponent {
 
     this.timeslotService.checkAvailability(appointmentRequestDto).subscribe(data => {
       this.availableTimeSlots = data;
-      this.availableTimeSlots.forEach((availableTimeSlot) => {
-        let timeSlots: TimeSlot[] = Object.entries(availableTimeSlot.combinationDtos.reduce((ac: { [key: string]: CombinationDto[] }, a) => {
-          let key = moment(a.startDateTime).format('HH:mm');
-          ac[key] = (ac[key] || []).concat(a);
-          return ac;
-        }, {})).map(([time, combinationDtos]) => ({ time, combinationDtos }));
-        this.daySlots.push(new DaySlot(moment(availableTimeSlot.date).format('DD-mm'), timeSlots))
-      });
+      // this.availableTimeSlots.forEach((availableTimeSlot) => {
+      //   let timeSlots: TimeSlot[] = Object.entries(availableTimeSlot.combinationDtos.reduce((ac: { [key: string]: CombinationDto[] }, a) => {
+      //     let key = moment(a.startDateTime).format('HH:mm');
+      //     ac[key] = (ac[key] || []).concat(a);
+      //     return ac;
+      //   }, {})).map(([time, combinationDtos]) => ({ time, combinationDtos }));
+      //   this.daySlots.push(new DaySlot(moment(availableTimeSlot.date).format('DD-mm'), timeSlots))
+      // });
     });
   }
 
   onSubmitCreateAppointment() {
-    var createAppointmentRequestDto: CreateAppointmentRequestDto = new CreateAppointmentRequestDto();
+    var createAppointmentRequestDto: CreateUpdateAppointmentRequestDto = new CreateUpdateAppointmentRequestDto();
 
       if (this.appointmentForm.controls.appointment.value)
-      createAppointmentRequestDto.timeSlotIds = this.appointmentForm.controls.appointment.value.timeSlotIds;
-
-    if (this.appointmentForm.controls.appointment.value)
       createAppointmentRequestDto.timeSlotIds = this.appointmentForm.controls.appointment.value.timeSlotIds;
 
     if (this.appointmentsForm.controls.service.value)
       createAppointmentRequestDto.serviceId = this.appointmentsForm.controls.service.value;
 
-    if (this.appointmentForm.controls.appointment.value)
-      createAppointmentRequestDto.employeeId = this.appointmentForm.controls.appointment.value.employeeId;
+    if (this.appointmentsForm.controls.employee.value)
+      createAppointmentRequestDto.employeeId = this.appointmentsForm.controls.employee.value;
 
     if (this.personalInfoForm.controls.paymentMethod.value)
       createAppointmentRequestDto.paymentMethod = this.personalInfoForm.controls.paymentMethod.value;

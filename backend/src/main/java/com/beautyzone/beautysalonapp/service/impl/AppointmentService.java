@@ -2,31 +2,41 @@ package com.beautyzone.beautysalonapp.service.impl;
 
 import com.beautyzone.beautysalonapp.constants.AppointmentStatus;
 import com.beautyzone.beautysalonapp.constants.PaymentMethod;
+import com.beautyzone.beautysalonapp.constants.Role;
 import com.beautyzone.beautysalonapp.constants.TimeSlotType;
 import com.beautyzone.beautysalonapp.domain.Appointment;
 //import com.beautyzone.beautysalonapp.domain.Employee;
 import com.beautyzone.beautysalonapp.domain.Timeslot;
 import com.beautyzone.beautysalonapp.domain.User;
 import com.beautyzone.beautysalonapp.exception.NoSuchElementException;
-import com.beautyzone.beautysalonapp.repository.AppointmentRepository;
-import com.beautyzone.beautysalonapp.repository.EmployeeRepository;
-import com.beautyzone.beautysalonapp.repository.ServiceRepository;
-import com.beautyzone.beautysalonapp.repository.TimeSlotRepository;
+import com.beautyzone.beautysalonapp.repository.*;
 import com.beautyzone.beautysalonapp.rest.dto.*;
 import com.beautyzone.beautysalonapp.rest.mapper.AppointmentMapper;
 import com.beautyzone.beautysalonapp.rest.mapper.CategoryMapper;
 import com.beautyzone.beautysalonapp.rest.mapper.TimeSlotMapper;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
+import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Time;
 import java.time.Instant;
@@ -40,12 +50,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.codec.binary.Hex;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 @Service
 @RequiredArgsConstructor
 public class AppointmentService {
+    public static final String RESPONSE_CODE_ELEMENT = "response-code";
+    public static final String DESCRIPTION_ELEMENT = "description";
+
 
     private final TimeSlotRepository timeSlotRepository;
+    private final UserRepository userRepository;
     private final AppointmentRepository appointmentRepository;
     private final EmployeeRepository employeeRepository;
     private final ServiceRepository serviceRepository;
@@ -56,6 +73,11 @@ public class AppointmentService {
     public AppointmentWithEmployeeResponseDto findById(Integer id) {
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Appointment with id: " + id + "not found."));
         return appointmentMapper.appointmentToAppointmentWithEmployeeResponseDto(appointment);
+    }
+
+    public List<AppointmentWithEmployeeResponseDto> findAll() {
+        List<Appointment> appointments = appointmentRepository.findAll();
+        return appointmentMapper.appointmentsToAppointmentWithEmployeeResponseDtos(appointments);
     }
 
     public List<AppointmentWithEmployeeResponseDto> findAllByClientId(Integer id) {
@@ -119,6 +141,62 @@ public class AppointmentService {
         }
     }
 
+    public boolean updateAppointment(AppointmentRequestDto appointmentRequestDto) {
+        try {
+            Appointment appointment = appointmentRepository.findById(Integer.valueOf(appointmentRequestDto.getId()))
+                    .orElseThrow(() -> new UsernameNotFoundException("Appointment not found"));
+            List<Timeslot> newTimeslots = timeSlotRepository.findAllById(appointmentRequestDto.getTimeSlotIds());
+            List<Timeslot> oldTimeslots = timeSlotRepository.findAllById(
+                    appointment.getTimeslots().stream().map(Timeslot::getId).collect(Collectors.toList())
+            );
+
+            // Update the modified fields
+            if (!appointment.getName().equals(appointmentRequestDto.getName()))
+                appointment.setName(appointmentRequestDto.getName());
+            if (!appointment.getPhoneNumber().equals(appointmentRequestDto.getPhoneNumber()))
+                appointment.setPhoneNumber(appointmentRequestDto.getPhoneNumber());
+            if (!appointment.getEmail().equals(appointmentRequestDto.getEmail()))
+                appointment.setEmail(appointmentRequestDto.getEmail());
+            if (!appointment.getNote().equals(appointmentRequestDto.getNote()))
+                appointment.setNote(appointmentRequestDto.getNote());
+            appointment.setUpdatedAt(LocalDateTime.now());
+
+            if (!appointment.getService().getId().equals(appointmentRequestDto.getServiceId()))
+                appointment.setService(serviceRepository.getReferenceById(appointmentRequestDto.getServiceId()));
+
+            if (!appointment.getEmployee().getId().equals(appointmentRequestDto.getEmployeeId()))
+                appointment.setEmployee(employeeRepository.getReferenceById(appointmentRequestDto.getEmployeeId()));
+
+            // Update the timeslots if they are modified
+            if (!oldTimeslots.equals(newTimeslots)) {
+                // Update the new timeslots with the new appointment, update the timeslot status and get the startTime for the appointment
+                LocalDateTime startTime = newTimeslots.get(0).getStartTime();
+
+                for (Timeslot timeslot : newTimeslots) {
+                    if (timeslot.getStartTime().isBefore(startTime)) {
+                        startTime = timeslot.getStartTime();
+                    }
+                    timeslot.setAppointment(appointment);
+                    timeslot.setTimeSlotType(TimeSlotType.SCHEDULED);
+                }
+
+                appointment.setAppointmentDateTime(startTime);
+                appointment.setTimeslots(newTimeslots);
+
+                // Make old timeslots available again
+                for (Timeslot timeslot : oldTimeslots) {
+                    timeslot.setAppointment(null);
+                    timeslot.setTimeSlotType(TimeSlotType.AVAILABLE);
+                }
+            }
+
+            appointmentRepository.save(appointment);
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     public String calculateSignature(String secretKey, Map<String, String> params) throws NoSuchAlgorithmException, InvalidKeyException {
         String requestParamsStr = params.entrySet().stream().sorted(Map.Entry.comparingByKey())
@@ -146,20 +224,134 @@ public class AppointmentService {
     public int handleSuccessfulPayment(IpgResponseDto ipgResponseDto) throws Exception {
         int appointmentId = Integer.parseInt(ipgResponseDto.getOrderNumber().replace("-test", ""));
         Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() -> new NoSuchElementException("Appointment with id " + appointmentId + " has not be found: "));
-        if (appointment.getAppointmentStatus().equals(AppointmentStatus.WAITING_FOR_PAYMENT)) {
+        if (appointment.getAppointmentStatus().equals(AppointmentStatus.WAITING_FOR_PAYMENT) || appointment.getAppointmentStatus().equals(AppointmentStatus.RESERVED)) {
             appointment.setAppointmentStatus(AppointmentStatus.PAID);
+            appointment.setPaymentMethod(PaymentMethod.CARD);
+            appointmentRepository.save(appointment);
             return appointmentId;
         } else
-            throw new Exception("Expected appointment status is " + AppointmentStatus.WAITING_FOR_PAYMENT + " ,but we got " + appointment.getAppointmentStatus() + " ");
+            throw new Exception("Expected appointment statuses are " + AppointmentStatus.WAITING_FOR_PAYMENT + " , or " + AppointmentStatus.RESERVED + " but we got " + appointment.getAppointmentStatus() + " ");
     }
 
     public int handleCanceledPayment(IpgResponseDto ipgResponseDto) throws Exception {
         int appointmentId = Integer.parseInt(ipgResponseDto.getOrderNumber().replace("-test", ""));
-        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() -> new NoSuchElementException("Appointment with id " + appointmentId + " has not be found: "));
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() -> new NoSuchElementException("Appointment with id " + appointmentId + " has not been found: "));
         if (appointment.getAppointmentStatus().equals(AppointmentStatus.WAITING_FOR_PAYMENT)) {
-            appointment.setAppointmentStatus(AppointmentStatus.PAID);
+            deleteAppointmentById(appointmentId);
+            return appointmentId;
+        } else if (appointment.getAppointmentStatus().equals(AppointmentStatus.RESERVED)) {
             return appointmentId;
         } else
-            throw new Exception("Expected appointment status is " + AppointmentStatus.WAITING_FOR_PAYMENT + " ,but we got " + appointment.getAppointmentStatus() + " ");
+            throw new Exception("Expected appointment statuses are " + AppointmentStatus.WAITING_FOR_PAYMENT + " , or " + AppointmentStatus.RESERVED + " but we got " + appointment.getAppointmentStatus() + " ");
     }
+
+    public void update(AppointmentCustomerDataUpdateRequestDto updateRequestDto) {
+        Appointment appointment = appointmentRepository.findById(updateRequestDto.getId()).orElseThrow(() -> new NoSuchElementException("Appointment not found with id: " + updateRequestDto.getId()));
+        appointment.setName(updateRequestDto.getName());
+        appointment.setEmail(updateRequestDto.getEmail());
+        appointment.setNote(updateRequestDto.getNote());
+        appointment.setPhoneNumber(updateRequestDto.getPhone());
+
+        appointmentRepository.save(appointment);
+    }
+
+    public boolean deleteAppointmentById(Integer id) {
+        try {
+            Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Appointment not found"));
+            //Refund if the client already paid
+            if (appointment.getAppointmentStatus().equals(AppointmentStatus.PAID)) {
+                try {
+                    char[] password = "Aneronaldo7!".toCharArray();
+                    KeyStore keyStore = KeyStore.getInstance("PKCS12");
+                    FileInputStream fis = new FileInputStream("C:\\Users\\andrijana.saplamaeva\\Documents\\cert\\CorvusPay.p12");
+                    keyStore.load(fis, password);
+
+                    KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+                    keyManagerFactory.init(keyStore, password);
+
+                    TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                    trustManagerFactory.init((KeyStore) null);
+
+                    SSLContext sslContext = SSLContext.getInstance("TLS");
+                    sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);
+
+                    URL url = new URL("https://testcps.corvus.hr/refund");
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    if (connection instanceof HttpsURLConnection) {
+                        ((HttpsURLConnection) connection).setSSLSocketFactory(sslContext.getSocketFactory());
+                    }
+                    connection.setRequestMethod("POST");
+                    connection.setDoOutput(true);
+                    connection.setDoInput(true);
+
+                    DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
+                    dataOutputStream.writeBytes(getParametersForRefund(13660,appointment.getId() + "-test", "c1L9yX1yrEEkQVGu2fBz5hImz"));
+                    dataOutputStream.flush();
+                    dataOutputStream.close();
+
+                    int responseCode = connection.getResponseCode();
+                    System.out.println("Response Code: " + responseCode);
+
+                    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    String inputLine;
+                    StringBuilder response = new StringBuilder();
+
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+
+                    if (!(response.toString().isEmpty())) {
+                        Element root = DocumentBuilderFactory
+                                .newInstance()
+                                .newDocumentBuilder()
+                                .parse(new ByteArrayInputStream(response.toString().getBytes("UTF-8")))
+                                .getDocumentElement();
+                        NodeList orderResponseCodesAsList = root.getElementsByTagName(RESPONSE_CODE_ELEMENT);
+                        Node orderResponseCodeAsNode = getResponseCodeAsNode(orderResponseCodesAsList, root);
+                        NodeList errorDescriptionAsList = root.getElementsByTagName(DESCRIPTION_ELEMENT);
+                        if (orderResponseCodeAsNode != null) {
+                            if(!Integer.valueOf(orderResponseCodeAsNode.getTextContent()).equals(0))
+                                return false;
+                        }
+                        if (errorDescriptionAsList != null && errorDescriptionAsList.getLength() > 0) {
+                            return false;
+                        }
+                    } else {
+                        throw new IllegalStateException("Empty response received.");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+
+            appointment.getTimeslots().forEach(timeslot -> {
+                timeslot.setTimeSlotType(TimeSlotType.AVAILABLE);
+                timeslot.setAppointment(null);
+            });
+
+            appointmentRepository.save(appointment);
+
+            appointmentRepository.deleteById(id);
+        } catch (Exception e) {
+            return false;
+        }
+        return !appointmentRepository.existsById(id);
+    }
+
+    private String getParametersForRefund(Integer storeId, String orderNumber, String key) throws UnsupportedEncodingException {
+        return "store_id=" + storeId +
+                "&order_number=" + URLEncoder.encode(orderNumber, "UTF-8") +
+                "&hash=" + DigestUtils.sha1Hex(key + orderNumber + storeId);
+    }
+
+    private Node getResponseCodeAsNode(NodeList responseCodeNodeList, Element root){
+        for (int i = 0; i<responseCodeNodeList.getLength();i++) {
+            if(responseCodeNodeList.item(i).getParentNode().isSameNode(root))
+                return responseCodeNodeList.item(i);
+        }
+        return null;
+    }
+
 }

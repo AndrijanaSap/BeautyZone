@@ -8,6 +8,9 @@ import { EmployeeAppointmentListComponent } from './employee-appointment-list/em
 import { CalendarHeaderComponent } from 'src/app/utils/calendar-header.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { AppointmentEditComponent } from './appointment-edit/appointment-edit.component';
+import { AppointmentRescheduleComponent } from './appointment-reschedule/appointment-reschedule.component';
+import { AppointmentDetailsDialogComponent } from './admin-appointment-list/appointment-details-dialog/appointment-details-dialog.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +18,10 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     EmployeeAppointmentListComponent,
     AdminAppointmentListComponent,
     CreateAppointmentComponent,
-    CalendarHeaderComponent
+    CalendarHeaderComponent,
+    AppointmentEditComponent,
+    AppointmentRescheduleComponent,
+    AppointmentDetailsDialogComponent
   ],
   imports: [
     CommonModule,

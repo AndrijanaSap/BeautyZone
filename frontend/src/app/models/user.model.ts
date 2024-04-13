@@ -5,4 +5,6 @@ export class UserDto {
     email: string;
     phone: string;
     role:string;
+    ipAddress:string;
+    [column: string]: any;
   }

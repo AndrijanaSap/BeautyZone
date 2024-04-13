@@ -16,6 +16,9 @@ export class UserService {
   private apiUrl = 'http://localhost:8080/api/v1/users';
   
   constructor(private http: HttpClient) {}
+  getIp(): Observable<any> {
+    return this.http.get<any>('https://geolocation-db.com/json/');
+  }
 
   getUserById(id: string): Observable<UserDto> {
     return this.http.get<UserDto>(`${this.apiUrl}/${id}`);
@@ -24,4 +27,13 @@ export class UserService {
   updateUser(user: UserDto): Observable<UserDto> {
     return this.http.post<UserDto>(`${this.apiUrl}/update`, user);
   }
+
+  getAllClients(): Observable<UserDto[]> {
+    return this.http.get<UserDto[]>(`${this.apiUrl}/getAllClients`);
+  }
+
+  delete(id: string): Observable<boolean> {
+    return this.http.delete<boolean>(this.apiUrl + '/delete/' + id);
+  }
+
 }

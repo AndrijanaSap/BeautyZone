@@ -45,7 +45,9 @@ public class TimeSlotService {
         com.beautyzone.beautysalonapp.domain.Service service = serviceRepository.findById(availabilityRequestDto.getServiceId())
                 .orElseThrow(() -> new NoSuchElementException("Service not found with id: " + availabilityRequestDto.getServiceId()));
 
-        List<Timeslot> timeSlots = timeSlotRepository.findByStartTimeBetweenAndTimeSlotTypeAndEmployeeIdInOrderByEmployeeAscStartTimeAsc(from, to, TimeSlotType.AVAILABLE.toString(), employeeIds);
+        List<Timeslot> timeSlots = timeSlotRepository.findByStartTimeBetweenAndTimeSlotTypeAndEmployeeIdInOrderByEmployeeAscStartTimeAsc(from, to, TimeSlotType.AVAILABLE.toString(), employeeIds, availabilityRequestDto.getIncludeAppointmentId());
+
+        //da dodademe vekje zafateni timeslotovi ako ima potreba
 
         LocalDateTime currentDateTime = convert(availabilityRequestDto.getPeriodFrom());
         List<CombinationDto> combinationDtos = new ArrayList<>();
@@ -77,6 +79,8 @@ public class TimeSlotService {
                 i--;
             }
         }
+
+        //Remove current combination if reschedule
 
         // Add last day
         AvailabilityResponseDto availabilityResponseDto = new AvailabilityResponseDto();

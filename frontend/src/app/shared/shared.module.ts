@@ -50,6 +50,8 @@ import { CalendarHeaderComponent } from '../utils/calendar-header.component';
 import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AppointmentModule } from '../components/appointment/appointment.module';
+import { NgbdSortableHeader } from './directives/ngbd-sortable-header.directive';
+import {MatDialog, MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
 
 const modules = [ 
   BrowserModule,
@@ -78,9 +80,11 @@ const modules = [
   MatIconModule,
   MatTableModule,
   MatCheckboxModule,
+  MatDialogModule,
   AsyncPipe,
   MatAutocompleteModule,
   NgxMatFileInputModule,
+  NgbdSortableHeader
   // JwtModule.forRoot({
   //   config: {
   //     tokenGetter: () => {

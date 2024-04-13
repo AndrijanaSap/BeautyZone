@@ -34,6 +34,6 @@ public class Service {
     )
     private List<User> employees;
 
-    @OneToMany(mappedBy = "service", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "service", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Appointment> appointments;
 }

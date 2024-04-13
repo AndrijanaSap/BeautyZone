@@ -1,7 +1,9 @@
 package com.beautyzone.beautysalonapp.rest;
 
+import com.beautyzone.beautysalonapp.rest.dto.AppointmentCustomerDataUpdateRequestDto;
 import com.beautyzone.beautysalonapp.rest.dto.AppointmentRequestDto;
 import com.beautyzone.beautysalonapp.rest.dto.AvailabilityRequestDto;
+import com.beautyzone.beautysalonapp.rest.dto.UserDto;
 import com.beautyzone.beautysalonapp.service.impl.AppointmentService;
 import com.beautyzone.beautysalonapp.service.impl.TimeSlotService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,15 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService;
 
+    @GetMapping("/getAll")
+    public ResponseEntity<?> getAll() {
+        try {
+            return ResponseEntity.ok(appointmentService.findAll());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+
     @GetMapping("/getAllByClientId/{clientId}")
     public ResponseEntity<?> getAllByClientId(@PathVariable Integer clientId) {
         try {
@@ -37,6 +48,7 @@ public class AppointmentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
+
     @GetMapping("/{appointmentId}")
     public ResponseEntity<?> getAppointmentById(@PathVariable Integer appointmentId) {
         try {
@@ -54,6 +66,15 @@ public class AppointmentController {
         }
     }
 
+    @PostMapping("/updateAppointment")
+    public ResponseEntity<?> updateAnAppointment(@RequestBody AppointmentRequestDto appointmentRequestDto){
+        try {
+            return ResponseEntity.ok(appointmentService.updateAppointment(appointmentRequestDto));
+        } catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+
     @PostMapping(value = "/calculateSignature", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> calculateSignature(@RequestBody Map<String, String> params){
         try {
@@ -62,5 +83,20 @@ public class AppointmentController {
         } catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
+    }
+
+    @PutMapping("/updateAppointmentCustomerData")
+    public ResponseEntity<?> updateAppointmentCustomerData(@RequestBody AppointmentCustomerDataUpdateRequestDto updateRequestDto){
+        try {
+            appointmentService.update(updateRequestDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public boolean deleteClient(@PathVariable Integer id) {
+        return appointmentService.deleteAppointmentById(id);
     }
 }

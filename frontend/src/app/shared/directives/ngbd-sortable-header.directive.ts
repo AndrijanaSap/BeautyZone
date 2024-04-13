@@ -1,13 +1,11 @@
-import { Component, Directive, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
-import { EmployeeDto } from 'src/app/models/employee.model';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
-export type SortColumnEmployee = keyof EmployeeDto | '';
 export type SortDirection = 'asc' | 'desc' | '';
 
 const rotate: { [key: string]: SortDirection } = { asc: 'desc', desc: '', '': 'asc' };
 
-export  interface SortEventEmployee {
-	column: SortColumnEmployee;
+export  interface SortEvent {
+	column: string;
 	direction: SortDirection;
 }
 @Directive({
@@ -19,10 +17,10 @@ export  interface SortEventEmployee {
 		'(click)': 'rotate()',
 	},
 })
-export class NgbdSortableHeaderEmployee {
-	@Input() sortable: SortColumnEmployee = '';
+export class NgbdSortableHeader {
+	@Input() sortable: string = '';
 	@Input() direction: SortDirection = '';
-	@Output() sort = new EventEmitter<SortEventEmployee>();
+	@Output() sort = new EventEmitter<SortEvent>();
 
 	rotate() {
 		this.direction = rotate[this.direction];

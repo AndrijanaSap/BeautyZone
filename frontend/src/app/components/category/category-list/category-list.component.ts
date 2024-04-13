@@ -2,9 +2,9 @@ import { Component, Directive, EventEmitter, Input, OnInit, Output, QueryList, V
 import { Router } from '@angular/router';
 import { CategoryWithServicesDto } from 'src/app/models/category-with-services.model';
 import { CategoryService } from 'src/app/services/category.service';
-import { NgbdSortableHeaderCategory, SortEvent } from '../ngbd-sortable-header-category.directive';
+import { NgbdSortableHeader, SortEvent } from 'src/app/shared/directives/ngbd-sortable-header.directive';
 
-const compare = (v1: any, v2:any) => (v1 < v2 ? -1 : v1 > v2 ? 1 : 0);
+const compare = (v1: string, v2:string) => (v1 < v2 ? -1 : v1 > v2 ? 1 : 0);
 
 
 @Component({
@@ -13,7 +13,7 @@ const compare = (v1: any, v2:any) => (v1 < v2 ? -1 : v1 > v2 ? 1 : 0);
   styleUrls: ['./category-list.component.css']
 })
 export class CategoryListComponent implements OnInit {
-  @ViewChildren(NgbdSortableHeaderCategory) headers: QueryList<NgbdSortableHeaderCategory>;
+  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
   displayedColumns: string[] = ['id', 'name', 'jobPosition', 'services', 'actions'];
   dataSource: CategoryWithServicesDto[];
   initialDataSource: CategoryWithServicesDto[];

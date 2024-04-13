@@ -5,4 +5,5 @@ export class RegisterRequestDto {
   surname:string;
   phone: string;
   role: string;
+  ipAddress: string;
   }

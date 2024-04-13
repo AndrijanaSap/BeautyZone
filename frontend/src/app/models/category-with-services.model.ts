@@ -5,6 +5,7 @@ export interface CategoryWithServicesDto {
     name: string;
     jobPosition: string;
     services: ServiceDto[];
+    [column: string]: any;
   }
 
   export class CategoryWithServicesDto {

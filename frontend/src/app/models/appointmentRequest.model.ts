@@ -5,4 +5,5 @@ export class AppointmentRequestDto {
   employeeId: number;
   periodFrom: Date;
   periodTo: Date;
+  includeAppointmentId: number;
   }

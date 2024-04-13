@@ -1,0 +1,51 @@
+<h1 mat-dialog-title>Details</h1>
+<div mat-dialog-content>
+    <table style="width:100%">
+        <tr>
+            <th>Id:</th>
+            <td>{{data.id}}</td>
+        </tr>
+        <tr>
+            <th>Appointment date and time:</th>
+            <td>{{data.appointmentDateTime | date: 'dd.MM.yyyy HH:mm'}}</td>
+        </tr>
+        <tr>
+            <th>Payment method:</th>
+            <td>{{data.paymentMethod}}</td>
+        </tr>
+        <tr>
+            <th>Service:</th>
+            <td>{{data.service.name}}</td>
+        </tr>
+        <tr>
+            <th>Duration:</th>
+            <td>{{data.service.durationInMinutes}}</td>
+        </tr>
+        <tr>
+            <th>Employee:</th>
+            <td>{{data.employee.name}} {{data.employee.surname}}</td>
+        </tr>
+        <tr>
+            <th>Client name and surname:</th>
+            <td>{{data.name}}</td>
+        </tr>
+        <tr>
+            <th>Client phone number:</th>
+            <td>{{data.phoneNumber}}</td>
+        </tr>
+        <tr>
+            <th>Client email:</th>
+            <td>{{data.email}}</td>
+        </tr>
+        <tr>
+            <th>Note:</th>
+            <td>{{data.note}}</td>
+        </tr>
+
+        <tr>
+            <th>Status:</th>
+            <td>{{data.appointmentStatus}}</td>
+        </tr>
+
+    </table>
+</div>

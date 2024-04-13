@@ -15,6 +15,9 @@
                     <a class="nav-link" routerLink="/employees">Employees</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" routerLink="/clients">Clients</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" routerLink="/categories">Categories</a>
                 </li>
                 <!-- <li class="nav-item">
@@ -22,6 +25,12 @@
                 </li> -->
                 <li class="nav-item" *ngIf="!isClientAppointments()">
                     <a class="nav-link" routerLink="/client-appointments">My appointments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/appointments">Admin appointments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/employee-appointments">Employee appointments</a>
                 </li>
                 <li class="nav-item" *ngIf="!isMyProfile()">
                     <a class="nav-link" routerLink="/my-profile">My profile</a>

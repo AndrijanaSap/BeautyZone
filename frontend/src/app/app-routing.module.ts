@@ -21,6 +21,11 @@ import { EmployeeAppointmentListComponent } from './components/appointment/emplo
 import { CategoryAddComponent } from './components/category/category-add/category-add.component';
 import { CategoryEditComponent } from './components/category/category-edit/category-edit.component';
 import { CategoryListComponent } from './components/category/category-list/category-list.component';
+import { ClientEditComponent } from './components/client/client-edit/client-edit.component';
+import { ClientListComponent } from './components/client/client-list/client-list.component';
+import { AdminAppointmentListComponent } from './components/appointment/admin-appointment-list/admin-appointment-list.component';
+import { AppointmentEditComponent } from './components/appointment/appointment-edit/appointment-edit.component';
+import { AppointmentRescheduleComponent } from './components/appointment/appointment-reschedule/appointment-reschedule.component';
 
 
 const routes: Routes =[
@@ -39,11 +44,16 @@ const routes: Routes =[
   { path: 'employees', component: EmployeeListComponent },
   { path: 'add-employee', component: EmployeeAddComponent },
   { path: 'edit-employee/:id', component: EmployeeEditComponent },
+  { path: 'clients', component: ClientListComponent },
+  { path: 'edit-client/:id', component: ClientEditComponent },
   { path: 'admin-services', component: AdminServiceListComponent },
   { path: 'employee-appointments', component: EmployeeAppointmentListComponent},
   { path: 'add-category', component: CategoryAddComponent },
   { path: 'edit-category/:id', component: CategoryEditComponent },
-  { path: 'categories', component: CategoryListComponent }
+  { path: 'categories', component: CategoryListComponent },
+  { path: 'appointments', component: AdminAppointmentListComponent },
+  { path: 'edit-appointment/:id', component: AppointmentEditComponent },
+  { path: 'reschedule-appointment/:id', component: AppointmentRescheduleComponent },
 ];
 
 

@@ -1,7 +1,8 @@
-export class CreateAppointmentRequestDto {
+export class CreateUpdateAppointmentRequestDto {
   timeSlotIds: number[];
   
   //appointment data
+  id: number;
   paymentMethod: string;
   serviceId: number;
   employeeId:number;

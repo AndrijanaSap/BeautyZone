@@ -38,12 +38,27 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getAllClients")
+    public ResponseEntity<?> getAllClients() {
+        try {
+            return ResponseEntity.ok(service.findAllClients());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+
     @PostMapping("/update")
-    public ResponseEntity<?> createAnAppointment(@RequestBody UserDto userDto){
+    public ResponseEntity<?> updateUser(@RequestBody UserDto userDto){
         try {
             return ResponseEntity.ok(service.update(userDto));
         } catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
+
+    @DeleteMapping("/delete/{id}")
+    public boolean deleteClient(@PathVariable Integer id) {
+        return service.deleteClientById(id);
+    }
+
 }

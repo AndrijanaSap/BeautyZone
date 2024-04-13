@@ -47,11 +47,11 @@ public interface TimeSlotRepository extends JpaRepository<Timeslot, Integer> {
 
     @Query(value = "SELECT * FROM beautysalon.timeslot t " +
             "WHERE t.start_time BETWEEN :startTime AND :endTime " +
-            "AND t.time_slot_type = :timeSlotType " +
+            "AND (t.time_slot_type = :timeSlotType OR t.appointment_id = :appointmentId) " +
             "AND t.employee_id IN :employeeIds " +
             "ORDER BY DATE(t.start_time), t.employee_id, t.start_time", nativeQuery = true)
     List<Timeslot> findByStartTimeBetweenAndTimeSlotTypeAndEmployeeIdInOrderByEmployeeAscStartTimeAsc(
-            LocalDateTime startTime, LocalDateTime endTime, String timeSlotType, List<Integer> employeeIds);
+            LocalDateTime startTime, LocalDateTime endTime, String timeSlotType, List<Integer> employeeIds, Integer appointmentId);
 
     Timeslot findByEmployeeAndStartTimeAndEndTime(User employee, LocalDateTime startTime, LocalDateTime endTime);
 

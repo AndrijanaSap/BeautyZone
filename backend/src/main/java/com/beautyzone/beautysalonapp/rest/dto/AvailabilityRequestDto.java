@@ -11,6 +11,7 @@ import java.util.UUID;
 public class AvailabilityRequestDto {
     private Integer serviceId;
     private Integer employeeId;
+    private Integer includeAppointmentId;
     private Date periodFrom;
     private Date periodTo;
 }

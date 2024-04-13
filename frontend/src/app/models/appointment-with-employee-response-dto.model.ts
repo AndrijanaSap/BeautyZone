@@ -3,6 +3,7 @@ import { ServiceDto } from "./service.model";
 
 export interface AppointmentWithEmployeeResponseDto {
   id: number;
+  clientId:string;
   paymentMethod: string;
   service: ServiceDto;
   employee:EmployeeDto;
@@ -12,8 +13,10 @@ export interface AppointmentWithEmployeeResponseDto {
   note: string | null;
   appointmentDateTime: Date;
   appointmentStatus: string;
+  ipAddress: string;
+  [column: string]: any;
   }
 
   export class AppointmentWithEmployeeResponseDto implements AppointmentWithEmployeeResponseDto{
-
+  
   }
