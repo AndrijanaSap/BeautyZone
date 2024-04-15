@@ -96,7 +96,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public boolean deleteClient(@PathVariable Integer id) {
+    public boolean deleteAppointment(@PathVariable Integer id) {
         return appointmentService.deleteAppointmentById(id);
     }
 }

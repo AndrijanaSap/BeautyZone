@@ -29,6 +29,11 @@ public class Timeslot {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Appointment appointment;
 
+    @ManyToOne
+    @JoinColumn(name = "holiday_id")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    private Holiday holiday;
+
     private LocalDateTime creationTime;
 
     private LocalDateTime startTime;

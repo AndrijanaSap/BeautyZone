@@ -11,6 +11,8 @@ import { SharedModule } from './shared/shared.module';
 import { EmployeeModule } from './components/employee/employee.module';
 import { AppointmentModule } from './components/appointment/appointment.module';
 import { ClientModule } from './components/client/client.module';
+import { HolidayService } from './services/holiday.service';
+import { HolidayModule } from './components/holiday/holiday.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { ClientModule } from './components/client/client.module';
     EmployeeModule,
     AppointmentModule,
     ClientModule,
+    HolidayModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {
@@ -46,7 +49,7 @@ import { ClientModule } from './components/client/client.module';
     // CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
   ],
 
-  providers: [CategoryService, ServiceService, EmployeeService, AppointmentService],
+  providers: [CategoryService, ServiceService, EmployeeService, AppointmentService, HolidayService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

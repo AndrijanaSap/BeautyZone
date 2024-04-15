@@ -1,0 +1,59 @@
+<div class="wrapper">
+    <div class="page-header page-header-xs" data-parallax="true"
+        style="background-image: url('./assets/img/horizontal-banner-beauty-products.jpg');">
+        <div class="filter"></div>
+    </div>
+    <div class="section profile-content">
+        <div class="container">
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper justify-content-center">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1>Holidays</h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button routerLink="/add-holiday" type="button" class="btn btn-default btn-sm">Add
+                                holiday</button>
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Id</th>
+                                        <th scope="col" sortable="employee" (sort)="onSort($event)">Employee</th>
+                                        <th scope="col" sortable="name" (sort)="onSort($event)">Name</th>
+                                        <th scope="col" sortable="holidayType" (sort)="onSort($event)">Holiday type</th>
+                                        <th scope="col" sortable="from" (sort)="onSort($event)">From</th>
+                                        <th scope="col" sortable="to" (sort)="onSort($event)">To</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let holiday of dataSource">
+                                        <th scope="row">{{ holiday.id }}</th>
+                                        <td>{{ holiday.employee.name }} {{ holiday.employee.surname }}</td>
+                                        <td>{{ holiday.name }}</td>
+                                        <td>{{ holiday.holidayType }}</td>
+                                        <td>
+                                            {{ holiday.startDateTime | date: 'dd.MM' }}
+                                        </td>
+                                        <td>
+                                            {{ holiday.endDateTime | date: 'dd.MM' }}
+                                        </td>
+                                        <td style="display: flex;">
+                                            <button [routerLink]="'/edit-holiday/'+ holiday.id" type="button"
+                                                class="btn btn-default btn-sm">Edit</button>
+                                            <button (click)="delete(holiday.id)" type="button"
+                                                class="btn btn-default btn-sm">Delete</button>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -26,6 +26,9 @@ import { ClientListComponent } from './components/client/client-list/client-list
 import { AdminAppointmentListComponent } from './components/appointment/admin-appointment-list/admin-appointment-list.component';
 import { AppointmentEditComponent } from './components/appointment/appointment-edit/appointment-edit.component';
 import { AppointmentRescheduleComponent } from './components/appointment/appointment-reschedule/appointment-reschedule.component';
+import { HolidayAddComponent } from './components/holiday/holiday-add/holiday-add.component';
+import { HolidayEditComponent } from './components/holiday/holiday-edit/holiday-edit.component';
+import { HolidayListComponent } from './components/holiday/holiday-list/holiday-list.component';
 
 
 const routes: Routes =[
@@ -53,7 +56,9 @@ const routes: Routes =[
   { path: 'categories', component: CategoryListComponent },
   { path: 'appointments', component: AdminAppointmentListComponent },
   { path: 'edit-appointment/:id', component: AppointmentEditComponent },
-  { path: 'reschedule-appointment/:id', component: AppointmentRescheduleComponent },
+  { path: 'add-holiday', component: HolidayAddComponent },
+  { path: 'edit-holiday/:id', component: HolidayEditComponent },
+  { path: 'holidays', component: HolidayListComponent },
 ];
 
 

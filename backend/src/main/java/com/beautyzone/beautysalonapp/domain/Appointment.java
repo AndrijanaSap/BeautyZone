@@ -3,10 +3,7 @@ package com.beautyzone.beautysalonapp.domain;
 import com.beautyzone.beautysalonapp.constants.AppointmentStatus;
 import com.beautyzone.beautysalonapp.constants.PaymentMethod;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -15,10 +12,7 @@ import java.util.List;
 
 @Entity
 @Table
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

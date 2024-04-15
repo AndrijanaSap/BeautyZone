@@ -55,6 +55,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Appointment> employeeAppointments;
 
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Holiday> holidays;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

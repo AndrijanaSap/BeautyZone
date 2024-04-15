@@ -1,0 +1,79 @@
+<div class="wrapper">
+    <div class="page-header page-header-xs" data-parallax="true"
+        style="background-image: url('./assets/img/horizontal-banner-beauty-products.jpg');">
+        <div class="filter"></div>
+    </div>
+    <div class="section profile-content">
+        <div class="container">
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper justify-content-center">
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-6 mr-auto ml-auto">
+                            <div class="card  mb-3">
+                                <h3 class="title">Edit holiday</h3>
+                                <form class="register-form" [formGroup]="updateForm" (ngSubmit)="onSubmit()">
+                                    <div class="row">
+                                        <div class="col">
+                                            <mat-form-field>
+                                                <mat-label>Name</mat-label>
+                                                <input matInput placeholder="Name" formControlName="name">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col">
+                                            <mat-form-field>
+                                                <mat-label>Holiday type</mat-label>
+                                                <mat-select formControlName="holidayType">
+                                                    <mat-option value="HOLIDAY">Holiday</mat-option>
+                                                    <mat-option value="HOLIDAY_DAY">Holiday day (Vacation)</mat-option>
+                                                    <mat-option value="SICK_DAY">Sick day</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col">
+                                            <mat-form-field>
+                                                <mat-label>Enter a date range</mat-label>
+                                                <mat-date-range-input [min]="minDate" [max]="maxDate"
+                                                    formGroupName="range" [rangePicker]="picker">
+                                                    <input matStartDate formControlName="start"
+                                                        placeholder="Start date">
+                                                    <input matEndDate formControlName="end" placeholder="End date">
+                                                </mat-date-range-input>
+                                                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                                                <mat-datepicker-toggle matIconSuffix
+                                                    [for]="picker"></mat-datepicker-toggle>
+                                                <mat-date-range-picker #picker></mat-date-range-picker>
+
+                                                <mat-error
+                                                    *ngIf="updateForm.controls.range.controls.start.hasError('matStartDateInvalid')">Invalid
+                                                    start date</mat-error>
+                                                <mat-error
+                                                    *ngIf="updateForm.controls.range.controls.end.hasError('matEndDateInvalid')">Invalid
+                                                    end date</mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col">
+                                            <mat-form-field style="width: 100%;">
+                                                <mat-label>Employee</mat-label>
+                                                <input matInput [value]="employee.name + ' '+ employee.surname" disabled="true"/>
+                                            </mat-form-field>
+                                        </div>
+
+
+
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mr-auto ml-auto"><button type="submit"
+                                                [disabled]="!updateForm.valid" class="btn btn-round">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

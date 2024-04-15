@@ -53,6 +53,9 @@ public interface TimeSlotRepository extends JpaRepository<Timeslot, Integer> {
     List<Timeslot> findByStartTimeBetweenAndTimeSlotTypeAndEmployeeIdInOrderByEmployeeAscStartTimeAsc(
             LocalDateTime startTime, LocalDateTime endTime, String timeSlotType, List<Integer> employeeIds, Integer appointmentId);
 
+    List<Timeslot> findByStartTimeBetweenAndEmployee_Id(
+            LocalDateTime startTime, LocalDateTime endTime, Integer employeeId);
+
     Timeslot findByEmployeeAndStartTimeAndEndTime(User employee, LocalDateTime startTime, LocalDateTime endTime);
 
 }
