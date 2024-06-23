@@ -18,7 +18,7 @@ export class CategoryListComponent implements OnInit {
   dataSource: CategoryWithServicesDto[];
   initialDataSource: CategoryWithServicesDto[];
 
-  constructor(private categoryService: CategoryService, private router: Router) {
+  constructor(private categoryService: CategoryService) {
   }
 
   ngOnInit(): void {
@@ -27,8 +27,6 @@ export class CategoryListComponent implements OnInit {
       this.initialDataSource = data;
     });
   }
-
-
 	onSort({ column, direction }: SortEvent) {
 		// resetting other headers
 		this.headers.forEach((header) => {
@@ -47,8 +45,6 @@ export class CategoryListComponent implements OnInit {
 			});
 		}
 	}
-  
-
   delete(id: any) {
     this.categoryService.delete(id).subscribe(data => {
       if (data){

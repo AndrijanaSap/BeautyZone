@@ -1,0 +1,40 @@
+@import "beauty-zone/variables";
+@import "beauty-zone/mixins";
+
+@import "beauty-zone/typography";
+
+// Core CSS
+@import "beauty-zone/misc";
+@import "beauty-zone/buttons";
+@import "beauty-zone/inputs";
+@import "beauty-zone/progress-bars";
+@import "beauty-zone/sliders";
+@import "beauty-zone/alerts";
+@import "beauty-zone/labels";
+@import "beauty-zone/tooltips-and-popovers";
+@import "beauty-zone/sections";
+@import "beauty-zone/checkbox-radio";
+@import "beauty-zone/navbars";
+@import "beauty-zone/images";
+@import "beauty-zone/cards";
+@import "beauty-zone/footers";
+
+
+// Bootstrap Switch
+@import "beauty-zone/bootstrap-switch";
+
+// Fancy Stuff
+@import "beauty-zone/dropdown";
+//
+// icons
+@import "beauty-zone/icons";
+//
+@import "beauty-zone/tabs-navs-pagination";
+@import "beauty-zone/collapse";
+@import "beauty-zone/carousel";
+@import "beauty-zone/modal";
+//
+@import "beauty-zone/responsive";
+@import "beauty-zone/plugins/datetimepicker";
+@import "beauty-zone/social-buttons";
+@import "beauty-zone/examples";
