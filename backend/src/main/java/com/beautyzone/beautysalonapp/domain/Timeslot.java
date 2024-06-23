@@ -34,6 +34,11 @@ public class Timeslot {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Holiday holiday;
 
+    @ManyToOne
+    @JoinColumn(name = "shift_id")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    private Shift shift;
+
     private LocalDateTime creationTime;
 
     private LocalDateTime startTime;

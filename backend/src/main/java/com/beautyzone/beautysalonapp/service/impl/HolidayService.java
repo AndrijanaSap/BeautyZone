@@ -12,6 +12,7 @@ import com.beautyzone.beautysalonapp.rest.dto.*;
 import com.beautyzone.beautysalonapp.rest.mapper.HolidayMapper;
 import com.beautyzone.beautysalonapp.rest.mapper.CategoryMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class HolidayService {
     private final TimeSlotRepository timeSlotRepository;
@@ -56,13 +58,14 @@ public class HolidayService {
 
         for (Integer employeeId : holidayRequestDto.getEmployees()) {
             LocalDateTime localStartDateTime = holidayRequestDto.getStartDateTime().withZoneSameInstant(ZoneId.of("Europe/Skopje")).toLocalDateTime();
-            LocalDateTime localEndDateTime =holidayRequestDto.getEndDateTime().withZoneSameInstant(ZoneId.of("Europe/Skopje")).toLocalDateTime();
+            LocalDateTime localEndDateTime = holidayRequestDto.getEndDateTime().withZoneSameInstant(ZoneId.of("Europe/Skopje")).toLocalDateTime();
             List<Timeslot> timeslots = timeSlotRepository.findByStartTimeBetweenAndEmployee_Id(
-                    localStartDateTime ,
+                    localStartDateTime,
                     localEndDateTime,
                     employeeId);
 
             if (timeslots.isEmpty() || timeslots.stream().anyMatch(timeslot -> timeslot.getTimeSlotType().equals(TimeSlotType.SCHEDULED))) {
+                log.error("No available timeslots found for this period");
                 throw new Exception("No available timeslots found for this period");
             }
 
@@ -90,32 +93,53 @@ public class HolidayService {
 
     public void updateHoliday(HolidayRequestDto holidayRequestDto) throws Exception {
         List<Holiday> holidays = new ArrayList<>();
+        Holiday holiday = holidayRepository.findById(Integer.valueOf(holidayRequestDto.getId()))
+                .orElseThrow(() -> new UsernameNotFoundException("Holiday not found"));
 
         for (Integer employeeId : holidayRequestDto.getEmployees()) {
             LocalDateTime localStartDateTime = holidayRequestDto.getStartDateTime().withZoneSameInstant(ZoneId.of("Europe/Skopje")).toLocalDateTime();
-            LocalDateTime localEndDateTime =holidayRequestDto.getEndDateTime().withZoneSameInstant(ZoneId.of("Europe/Skopje")).toLocalDateTime();
-            List<Timeslot> newTimeslots = timeSlotRepository.findByStartTimeBetweenAndEmployee_Id(
-                    localStartDateTime ,
-                    localEndDateTime,
-                    employeeId);
+            LocalDateTime localEndDateTime = holidayRequestDto.getEndDateTime().withZoneSameInstant(ZoneId.of("Europe/Skopje")).toLocalDateTime();
 
-            if (newTimeslots.isEmpty() || newTimeslots.stream().anyMatch(timeslot -> timeslot.getTimeSlotType().equals(TimeSlotType.SCHEDULED))) {
-                throw new Exception("No available timeslots found for this period");
+            // Update TimeSlots if startDate and endDate are modified
+            if (!holiday.getStartDateTime().equals(localStartDateTime) ||
+                    !holiday.getEndDateTime().equals(localEndDateTime)) {
+                List<Timeslot> newTimeslots = timeSlotRepository.findByStartTimeBetweenAndEmployee_Id(
+                        localStartDateTime,
+                        localEndDateTime,
+                        employeeId);
+
+                if (newTimeslots.isEmpty() || newTimeslots.stream().anyMatch(timeslot -> timeslot.getTimeSlotType().equals(TimeSlotType.SCHEDULED))) {
+                    throw new Exception("No available timeslots found for this period");
+                }
+
+                List<Timeslot> oldTimeslots = holiday.getTimeslots();
+
+                if (!oldTimeslots.equals(newTimeslots)) {
+                    // Update the new timeslots with the new holiday and update the timeslot status
+
+                    for (Timeslot timeslot : newTimeslots) {
+                        timeslot.setHoliday(holiday);
+                        timeslot.setTimeSlotType(TimeSlotType.SCHEDULED);
+                    }
+
+                    holiday.setTimeslots(newTimeslots);
+
+                    // Make old timeslots available again
+                    for (Timeslot timeslot : oldTimeslots) {
+                        timeslot.setHoliday(null);
+                        timeslot.setTimeSlotType(TimeSlotType.AVAILABLE);
+                    }
+                }
             }
-
-            Holiday holiday = holidayRepository.findById(Integer.valueOf(holidayRequestDto.getId()))
-                    .orElseThrow(() -> new UsernameNotFoundException("Holiday not found"));
-
-            List<Timeslot> oldTimeslots = holiday.getTimeslots();
 
             // Update the modified fields
             if (!holiday.getName().equals(holidayRequestDto.getName()))
                 holiday.setName(holidayRequestDto.getName());
 
-            if (!holiday.getStartDateTime().equals(holidayRequestDto.getStartDateTime()))
+            if (!holiday.getStartDateTime().equals(localStartDateTime))
                 holiday.setStartDateTime(localStartDateTime);
 
-            if (!holiday.getEndDateTime().equals(holidayRequestDto.getEndDateTime()))
+            if (!holiday.getEndDateTime().equals(localEndDateTime))
                 holiday.setEndDateTime(localEndDateTime);
 
             if (!holiday.getHolidayType().equals(HolidayType.valueOf(holidayRequestDto.getHolidayType())))
@@ -123,25 +147,6 @@ public class HolidayService {
 
             if (!holiday.getEmployee().getId().equals(employeeId))
                 holiday.setEmployee(employeeRepository.getReferenceById(employeeId));
-
-
-            // Update the timeslots if they are modified
-            if (!oldTimeslots.equals(newTimeslots)) {
-                // Update the new timeslots with the new holiday and update the timeslot status
-
-                for (Timeslot timeslot : newTimeslots) {
-                    timeslot.setHoliday(holiday);
-                    timeslot.setTimeSlotType(TimeSlotType.SCHEDULED);
-                }
-
-                holiday.setTimeslots(newTimeslots);
-
-                // Make old timeslots available again
-                for (Timeslot timeslot : oldTimeslots) {
-                    timeslot.setHoliday(null);
-                    timeslot.setTimeSlotType(TimeSlotType.AVAILABLE);
-                }
-            }
 
             holidays.add(holiday);
         }

@@ -60,18 +60,16 @@ public class AppointmentService {
     public static final String RESPONSE_CODE_ELEMENT = "response-code";
     public static final String DESCRIPTION_ELEMENT = "description";
 
-
     private final TimeSlotRepository timeSlotRepository;
-    private final UserRepository userRepository;
     private final AppointmentRepository appointmentRepository;
     private final EmployeeRepository employeeRepository;
     private final ServiceRepository serviceRepository;
-    private final CategoryMapper categoryMapper;
     private final AppointmentMapper appointmentMapper;
     private final int timeSlotUnitInMinutes = 30;
 
     public AppointmentWithEmployeeResponseDto findById(Integer id) {
-        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Appointment with id: " + id + "not found."));
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() ->
+                new NoSuchElementException("Appointment with id: " + id + "not found."));
         return appointmentMapper.appointmentToAppointmentWithEmployeeResponseDto(appointment);
     }
 
@@ -245,7 +243,7 @@ public class AppointmentService {
             throw new Exception("Expected appointment statuses are " + AppointmentStatus.WAITING_FOR_PAYMENT + " , or " + AppointmentStatus.RESERVED + " but we got " + appointment.getAppointmentStatus() + " ");
     }
 
-    public void update(AppointmentCustomerDataUpdateRequestDto updateRequestDto) {
+    public void updateAppointmentCustomerData(AppointmentCustomerDataUpdateRequestDto updateRequestDto) {
         Appointment appointment = appointmentRepository.findById(updateRequestDto.getId()).orElseThrow(() -> new NoSuchElementException("Appointment not found with id: " + updateRequestDto.getId()));
         appointment.setName(updateRequestDto.getName());
         appointment.setEmail(updateRequestDto.getEmail());

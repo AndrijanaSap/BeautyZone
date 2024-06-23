@@ -9,7 +9,7 @@ spring:
     username: root
     password: password
   jpa:
-    show-sql: false
+    show-sql: true
     hibernate:
       ddl-auto=: update
     #spring.jpa.properties.hibernate.dialect=org.hibernate.MySQL8Dialect

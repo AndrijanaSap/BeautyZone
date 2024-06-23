@@ -88,7 +88,7 @@ public class AppointmentController {
     @PutMapping("/updateAppointmentCustomerData")
     public ResponseEntity<?> updateAppointmentCustomerData(@RequestBody AppointmentCustomerDataUpdateRequestDto updateRequestDto){
         try {
-            appointmentService.update(updateRequestDto);
+            appointmentService.updateAppointmentCustomerData(updateRequestDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());

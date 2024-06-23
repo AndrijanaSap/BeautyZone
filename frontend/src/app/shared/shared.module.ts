@@ -52,6 +52,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { AppointmentModule } from '../components/appointment/appointment.module';
 import { NgbdSortableHeader } from './directives/ngbd-sortable-header.directive';
 import {MatDialog, MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 const modules = [ 
   BrowserModule,
@@ -84,7 +85,8 @@ const modules = [
   AsyncPipe,
   MatAutocompleteModule,
   NgxMatFileInputModule,
-  NgbdSortableHeader
+  NgbdSortableHeader,
+  NgxMaterialTimepickerModule,
   // JwtModule.forRoot({
   //   config: {
   //     tokenGetter: () => {

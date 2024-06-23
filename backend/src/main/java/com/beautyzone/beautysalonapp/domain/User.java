@@ -44,16 +44,8 @@ public class User implements UserDetails {
     )
     private List<Service> services;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "user_shift",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "shift_id") }
-    )
-    private List<Shift> shifts;
-
     @OneToMany(mappedBy = "employee", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private List<Appointment> employeeAppointments;
+    private List<Shift> shifts;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Holiday> holidays;

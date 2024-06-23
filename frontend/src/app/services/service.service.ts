@@ -21,6 +21,10 @@ export class ServiceService {
     return this.http.get<ServiceWithEmployeesDto[]>(this.apiUrl + "/with-employees");
   }
 
+  getPopularServices(): Observable<ServiceDto[]> {
+    return this.http.get<ServiceDto[]>(`${this.apiUrl}/get-popular`);
+  }
+
   getServiceById(id: string): Observable<ServiceDto> {
     return this.http.get<ServiceDto>(`${this.apiUrl}/${id}`);
   }

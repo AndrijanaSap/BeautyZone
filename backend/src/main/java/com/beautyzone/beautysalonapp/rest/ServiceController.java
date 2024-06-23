@@ -57,6 +57,15 @@ public class ServiceController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
+
+    @GetMapping("/get-popular")
+    public ResponseEntity<?> getPopularServices() {
+        try {
+            return ResponseEntity.ok(serviceService.getPopularServices());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
 //    @PostMapping("/add")
 //    public ResponseEntity<Void> addService(
 //            @RequestBody ServiceUpdateRequestDto serviceUpdateRequestDto

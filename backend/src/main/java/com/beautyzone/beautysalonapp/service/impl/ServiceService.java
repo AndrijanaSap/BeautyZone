@@ -116,4 +116,12 @@ public class ServiceService {
                 .filter(f -> f.contains("."))
                 .map(f -> f.substring(filename.lastIndexOf(".") + 1));
     }
+
+    public List<ServiceWithCategoryDto> getPopularServices() throws NoSuchElementException {
+        List<com.beautyzone.beautysalonapp.domain.Service> services = serviceRepository.findAll();
+        if (services.isEmpty()) {
+            throw new NoSuchElementException("No service found!");
+        }
+        return serviceMapper.servicesToServiceWithCategoryDtos(services);
+    }
 }

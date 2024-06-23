@@ -10,22 +10,16 @@
                     <div class="row">
                         <div class="col-lg-12 col-sm-6 mr-auto ml-auto">
                             <div class="card  mb-3">
-                                <h3 class="title">Edit holiday</h3>
+                                <h3 class="title">Edit shift</h3>
                                 <form class="register-form" [formGroup]="updateForm" (ngSubmit)="onSubmit()">
                                     <div class="row">
                                         <div class="col">
                                             <mat-form-field>
-                                                <mat-label>Name</mat-label>
-                                                <input matInput placeholder="Name" formControlName="name">
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col">
-                                            <mat-form-field>
-                                                <mat-label>Holiday type</mat-label>
-                                                <mat-select formControlName="holidayType">
-                                                    <mat-option value="HOLIDAY">Holiday</mat-option>
-                                                    <mat-option value="HOLIDAY_DAY">Holiday day (Vacation)</mat-option>
-                                                    <mat-option value="SICK_DAY">Sick day</mat-option>
+                                                <mat-label>Shift</mat-label>
+                                                <mat-select formControlName="shiftType">
+                                                    <mat-option value="FIRST">First</mat-option>
+                                                    <mat-option value="SECOND">Second</mat-option>
+                                                    <mat-option value="CUSTOM">Custom</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>

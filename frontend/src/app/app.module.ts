@@ -13,6 +13,7 @@ import { AppointmentModule } from './components/appointment/appointment.module';
 import { ClientModule } from './components/client/client.module';
 import { HolidayService } from './services/holiday.service';
 import { HolidayModule } from './components/holiday/holiday.module';
+import { ShiftModule } from './components/shift/shift.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { HolidayModule } from './components/holiday/holiday.module';
     AppointmentModule,
     ClientModule,
     HolidayModule,
+    ShiftModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {

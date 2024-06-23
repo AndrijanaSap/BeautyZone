@@ -29,6 +29,9 @@ import { AppointmentRescheduleComponent } from './components/appointment/appoint
 import { HolidayAddComponent } from './components/holiday/holiday-add/holiday-add.component';
 import { HolidayEditComponent } from './components/holiday/holiday-edit/holiday-edit.component';
 import { HolidayListComponent } from './components/holiday/holiday-list/holiday-list.component';
+import { ShiftAddComponent } from './components/shift/shift-add/shift-add.component';
+import { ShiftEditComponent } from './components/shift/shift-edit/shift-edit.component';
+import { ShiftListComponent } from './components/shift/shift-list/shift-list.component';
 
 
 const routes: Routes =[
@@ -59,6 +62,9 @@ const routes: Routes =[
   { path: 'add-holiday', component: HolidayAddComponent },
   { path: 'edit-holiday/:id', component: HolidayEditComponent },
   { path: 'holidays', component: HolidayListComponent },
+  { path: 'add-shift', component: ShiftAddComponent },
+  { path: 'edit-shift/:id', component: ShiftEditComponent },
+  { path: 'shifts', component: ShiftListComponent },
 ];
 
 

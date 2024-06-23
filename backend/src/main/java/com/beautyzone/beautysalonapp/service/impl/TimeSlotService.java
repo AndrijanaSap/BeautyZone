@@ -97,8 +97,7 @@ public class TimeSlotService {
             return;
         }
         if (i + 1 < timeSlots.size() && timeSlots.get(i + 1).getStartTime().isEqual(timeSlots.get(i).getEndTime()) // is it consecutive number?
-                && timeSlots.get(i + 1).getEmployee().getId().equals(timeSlots.get(i).getEmployee().getId()) //is the same employee?
-        ) {
+                && timeSlots.get(i + 1).getEmployee().getId().equals(timeSlots.get(i).getEmployee().getId())) {  //is the same employee?
             timeSlotIds.add(timeSlots.get(i).getId());
             generateCombination(timeSlotIds, sumOfDurations + timeSlotUnitInMinutes, timeSlots, i + 1, durationOfService);
         }
