@@ -1,75 +1,91 @@
-//package com.beautyzone.beautysalonapp.service.impl;
-//
-//import com.beautyzone.beautysalonapp.domain.User;
-//import com.beautyzone.beautysalonapp.exception.CustomValidationException;
-//import com.beautyzone.beautysalonapp.exception.UserNotFoundException;
-//import com.beautyzone.beautysalonapp.repository.UserRepository;
-//import com.beautyzone.beautysalonapp.rest.dto.UserDto;
-//import com.beautyzone.beautysalonapp.rest.mapper.UserMapper;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Service;
-//
-//import static com.beautyzone.beautysalonapp.constants.ErrorConstants.*;
-//
-//@Service
-//@Slf4j
-//public class UserServiceImpl {
-//
-//    private final UserRepository userRepository;
-//
-//    @Autowired
-//    private UserMapper userMapper;
-//
-//    @Autowired
-//    public UserServiceImpl(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
-//
-////    public List<User> findAllUsers() {
-////        return UserRepository.findAll();
-////    }
-////
-////    public User updateUser(User User) {
-////        return UserRepository.save(User);
-////    }
-//
-//    public User findUserById(Integer id) {
-//        return userRepository.findUserById(id)
-//                .orElseThrow(() -> new UserNotFoundException("User by id " + id + " was not found"));
-//    }
-//
-//    public void deleteUser(Integer id){
-//        userRepository.deleteUserById(id);
-//    }
-//    public UserDto signUp(UserDto userDto) throws CustomValidationException{
-//        log.info("Entered signUp with data: {}", userDto);
-//        validateSignUpMap(userDto);
-//
-//        if(userRepository.findUserByEmail(userDto.getEmail()).isPresent())
-//         throw new CustomValidationException("User with email " + userDto.getEmail() + " already exists.");
-//
-//        User user = userRepository.save(userMapper.userDtoToUser(userDto));
-//        log.info("New user saved.");
-//        return userMapper.userToUserDto(user);
-//    }
-//
-//    private void validateSignUpMap(UserDto userDto) throws CustomValidationException{
-//        //Mandatory fields
-//        if(userDto.getName() == null || userDto.getName().isEmpty()){
-//            throw new CustomValidationException(REQUIRED_NAME);
-//        }
-//        if(userDto.getSurname() == null || userDto.getSurname().isEmpty()){
-//            throw new CustomValidationException(REQUIRED_SURNAME);
-//        }
-//        if(userDto.getEmail() == null || userDto.getEmail().isEmpty()){
-//            throw new CustomValidationException(REQUIRED_EMAIL);
-//        }
-//        if(userDto.getPhone() == null || userDto.getPhone().isEmpty()){
-//            throw new CustomValidationException(REQUIRED_PHONE);
-//        }
-//        if(userDto.getPassword() == null || userDto.getPassword().isEmpty()){
-//            throw new CustomValidationException(REQUIRED_PASSWORD);
-//        }
-//    }
-//}
+package com.beautyzone.beautysalonapp.service.impl;
+
+import com.beautyzone.beautysalonapp.constants.Role;
+import com.beautyzone.beautysalonapp.constants.TimeSlotType;
+import com.beautyzone.beautysalonapp.exception.NoSuchElementException;
+import com.beautyzone.beautysalonapp.repository.AppointmentRepository;
+import com.beautyzone.beautysalonapp.repository.TimeSlotRepository;
+import com.beautyzone.beautysalonapp.rest.dto.ChangePasswordRequest;
+import com.beautyzone.beautysalonapp.rest.dto.UserDto;
+import com.beautyzone.beautysalonapp.domain.User;
+import com.beautyzone.beautysalonapp.repository.UserRepository;
+import com.beautyzone.beautysalonapp.rest.mapper.UserMapper;
+import com.beautyzone.beautysalonapp.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.security.Principal;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
+
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository repository;
+    private final AppointmentRepository appointmentRepository;
+    private final TimeSlotRepository timeSlotRepository;
+    private final UserMapper userMapper;
+
+    @Override
+    public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
+
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
+        // check if the current password is correct
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new IllegalStateException("Wrong password");
+        }
+        // check if the two new passwords are the same
+        if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
+            throw new IllegalStateException("Password are not the same");
+        }
+
+        // update the password
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+        // save the new password
+        repository.save(user);
+    }
+    @Override
+    public UserDto findById(Integer id) {
+        User user = repository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
+        return userMapper.userToUserDto(user);
+    }
+    @Override
+    public List<UserDto> findAllClients() {
+        List<User> users = repository.findAllByRole(Role.CLIENT);
+        return userMapper.usersToUserDtos(users);
+    }
+    @Override
+    public UserDto update(UserDto userDto) {
+        // Get from db
+        User userDb = repository.findUserById(userDto.getId()).orElseThrow(() -> new NoSuchElementException("User not found with id: " + userDto.getId()));
+        userDb.setName(userDto.getName());
+        userDb.setSurname(userDto.getSurname());
+        userDb.setPhone(userDto.getPhone());
+        if(userDb.getRole().equals(Role.CLIENT)){
+            userDb.setIpAddress(userDto.getIpAddress());
+        }
+        repository.save(userDb);
+        return userMapper.userToUserDto(userDb);
+    }
+    @Override
+    public boolean deleteClientById(Integer id) {
+        try {
+            User user = repository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            user.getClientAppointments().forEach(appointment -> appointment.getTimeslots().forEach(timeslot -> {
+                timeslot.setTimeSlotType(TimeSlotType.AVAILABLE);
+                timeslot.setAppointment(null);
+            }));
+            repository.save(user);
+            repository.deleteById(id);
+        } catch (Exception e) {
+            return false;
+        }
+        return !repository.existsById(id);
+    }
+}

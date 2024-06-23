@@ -1,6 +1,6 @@
 package com.beautyzone.beautysalonapp;
 
-import com.beautyzone.beautysalonapp.service.impl.FirstTimeSlotPopulationService;
+import com.beautyzone.beautysalonapp.service.impl.FirstTimeSlotPopulationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class BeautysalonappApplication {
 	@Autowired
-	private FirstTimeSlotPopulationService firstTimeSlotPopulationService;
+	private FirstTimeSlotPopulationServiceImpl firstTimeSlotPopulationServiceImpl;
 
 	public static void main(String[] args) {
 		SpringApplication.run(BeautysalonappApplication.class, args);

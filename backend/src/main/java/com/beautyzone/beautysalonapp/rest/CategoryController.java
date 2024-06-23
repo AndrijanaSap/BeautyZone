@@ -1,18 +1,11 @@
 package com.beautyzone.beautysalonapp.rest;
 
-import com.beautyzone.beautysalonapp.domain.User;
 import com.beautyzone.beautysalonapp.rest.dto.CategoryUpdateRequestDto;
-import com.beautyzone.beautysalonapp.rest.dto.ServiceUpdateRequestDto;
-import com.beautyzone.beautysalonapp.service.impl.CategoryService;
+import com.beautyzone.beautysalonapp.service.impl.CategoryServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -22,12 +15,12 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CategoryController {
 
-    private final CategoryService categoryService;
+    private final CategoryServiceImpl categoryServiceImpl;
 
     @GetMapping("/with-services")
     public ResponseEntity<?> findAllCategoriesWithServices() {
         try {
-            return ResponseEntity.ok(categoryService.getAllWithServices());
+            return ResponseEntity.ok(categoryServiceImpl.getAllWithServices());
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -36,7 +29,7 @@ public class CategoryController {
     @GetMapping()
     public ResponseEntity<?> findAllCategories() {
         try {
-            return ResponseEntity.ok(categoryService.getAll());
+            return ResponseEntity.ok(categoryServiceImpl.getAll());
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -45,7 +38,7 @@ public class CategoryController {
     @GetMapping("/with-services/{categoryId}")
     public ResponseEntity<?> getServiceWithEmployeesById(@PathVariable Integer categoryId) {
         try {
-            return ResponseEntity.ok(categoryService.getCategoryWithServicesById(categoryId));
+            return ResponseEntity.ok(categoryServiceImpl.getCategoryWithServicesById(categoryId));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -53,7 +46,7 @@ public class CategoryController {
     @PostMapping(value = "/add")
     public ResponseEntity<?> addCategory(@RequestBody CategoryUpdateRequestDto categoryUpdateRequestDto) {
         try {
-            categoryService.addCategory(categoryUpdateRequestDto);
+            categoryServiceImpl.addCategory(categoryUpdateRequestDto);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -62,7 +55,7 @@ public class CategoryController {
     @PutMapping(value = "/update")
     public ResponseEntity<?> updateCategory(@RequestBody CategoryUpdateRequestDto categoryUpdateRequestDto) {
         try {
-            categoryService.updateCategory(categoryUpdateRequestDto);
+            categoryServiceImpl.updateCategory(categoryUpdateRequestDto);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -71,6 +64,6 @@ public class CategoryController {
 
     @DeleteMapping("/delete/{id}")
     public boolean deleteCategory(@PathVariable Integer id) {
-        return categoryService.deleteCategoryById(id);
+        return categoryServiceImpl.deleteCategoryById(id);
     }
 }

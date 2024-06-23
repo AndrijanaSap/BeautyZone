@@ -1,16 +1,8 @@
 package com.beautyzone.beautysalonapp.rest;
 
-import com.beautyzone.beautysalonapp.domain.Appointment;
-import com.beautyzone.beautysalonapp.exception.NoSuchElementException;
-import com.beautyzone.beautysalonapp.repository.AppointmentRepository;
-import com.beautyzone.beautysalonapp.rest.dto.AvailabilityRequestDto;
 import com.beautyzone.beautysalonapp.rest.dto.IpgResponseDto;
-import com.beautyzone.beautysalonapp.rest.dto.PaymentResponseDto;
-import com.beautyzone.beautysalonapp.service.impl.AppointmentService;
-import com.beautyzone.beautysalonapp.service.impl.CategoryService;
+import com.beautyzone.beautysalonapp.service.impl.AppointmentServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,7 +16,7 @@ public class PaymentController {
 
     private static final String ERROR_VIEW = "http://localhost:4200/error";
 
-    private final AppointmentService appointmentService;
+    private final AppointmentServiceImpl appointmentServiceImpl;
 
     @PostMapping("/success")
     public ModelAndView handleSuccess(
@@ -39,7 +31,7 @@ public class PaymentController {
         IpgResponseDto ipgResponseDto = new IpgResponseDto(order_number, language, approval_code, signature,
                 account_id, subscription_exp_date, discount_used);
         try {
-            int appointmentId = appointmentService.handleSuccessfulPayment(ipgResponseDto);
+            int appointmentId = appointmentServiceImpl.handleSuccessfulPayment(ipgResponseDto);
             return new ModelAndView("redirect:" + SUCCESS_VIEW + "/" + appointmentId);
         } catch (Exception e) {
             return new ModelAndView("redirect:" + ERROR_VIEW);
@@ -52,7 +44,7 @@ public class PaymentController {
         ipgResponseDto.setOrderNumber(order_number);
         ipgResponseDto.setLanguage(language);
         try {
-            int appointmentId = appointmentService.handleCanceledPayment(ipgResponseDto);
+            int appointmentId = appointmentServiceImpl.handleCanceledPayment(ipgResponseDto);
             return new ModelAndView("redirect:" + CANCEL_VIEW + "/" + appointmentId);
         } catch (Exception e) {
             return new ModelAndView("redirect:" + ERROR_VIEW);

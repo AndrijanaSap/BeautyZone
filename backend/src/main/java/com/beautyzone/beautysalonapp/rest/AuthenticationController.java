@@ -1,6 +1,6 @@
 package com.beautyzone.beautysalonapp.rest;
 
-import com.beautyzone.beautysalonapp.service.impl.AuthenticationService;
+import com.beautyzone.beautysalonapp.service.impl.AuthenticationServiceImpl;
 import com.beautyzone.beautysalonapp.rest.dto.AuthenticationRequest;
 import com.beautyzone.beautysalonapp.rest.dto.AuthenticationResponse;
 import com.beautyzone.beautysalonapp.rest.dto.RegisterRequest;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final AuthenticationService service;
+    private final AuthenticationServiceImpl service;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(

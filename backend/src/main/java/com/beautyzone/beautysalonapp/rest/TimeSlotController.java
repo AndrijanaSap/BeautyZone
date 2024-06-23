@@ -1,8 +1,7 @@
 package com.beautyzone.beautysalonapp.rest;
 
-import com.beautyzone.beautysalonapp.rest.dto.AppointmentRequestDto;
 import com.beautyzone.beautysalonapp.rest.dto.AvailabilityRequestDto;
-import com.beautyzone.beautysalonapp.service.impl.TimeSlotService;
+import com.beautyzone.beautysalonapp.service.impl.TimeSlotServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TimeSlotController {
 
-    private final TimeSlotService timeSlotService;
+    private final TimeSlotServiceImpl timeSlotServiceImpl;
 
 //    @GetMapping
 //    public ResponseEntity<?> findAllTimeSlots() {
@@ -29,7 +28,7 @@ public class TimeSlotController {
     public ResponseEntity<?> checkAvailability(@RequestBody AvailabilityRequestDto availabilityRequestDto){
         try {
             // TODO: If range periodFrom-periodTo(or periodTo minus periodFrom) is > 1 year, return validation error
-            return ResponseEntity.ok(timeSlotService.checkAvailability(availabilityRequestDto));
+            return ResponseEntity.ok(timeSlotServiceImpl.checkAvailability(availabilityRequestDto));
         } catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }

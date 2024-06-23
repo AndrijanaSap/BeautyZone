@@ -1,34 +1,29 @@
 package com.beautyzone.beautysalonapp.service.impl;
 
 import com.beautyzone.beautysalonapp.constants.HolidayType;
-import com.beautyzone.beautysalonapp.constants.PaymentMethod;
 import com.beautyzone.beautysalonapp.constants.TimeSlotType;
 import com.beautyzone.beautysalonapp.domain.Holiday;
 import com.beautyzone.beautysalonapp.domain.Timeslot;
-import com.beautyzone.beautysalonapp.domain.User;
 import com.beautyzone.beautysalonapp.exception.NoSuchElementException;
 import com.beautyzone.beautysalonapp.repository.*;
 import com.beautyzone.beautysalonapp.rest.dto.*;
 import com.beautyzone.beautysalonapp.rest.mapper.HolidayMapper;
 import com.beautyzone.beautysalonapp.rest.mapper.CategoryMapper;
+import com.beautyzone.beautysalonapp.service.HolidayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class HolidayService {
+public class HolidayServiceImpl implements HolidayService {
     private final TimeSlotRepository timeSlotRepository;
     private final UserRepository userRepository;
     private final HolidayRepository holidayRepository;
@@ -38,21 +33,22 @@ public class HolidayService {
     private final HolidayMapper holidayMapper;
     private final int timeSlotUnitInMinutes = 30;
 
+    @Override
     public HolidayWithEmployeeResponseDto findById(Integer id) {
         Holiday holiday = holidayRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Holiday with id: " + id + "not found."));
         return holidayMapper.holidayToHolidayWithEmployeeResponseDto(holiday);
     }
-
+    @Override
     public List<HolidayWithEmployeeResponseDto> findAll() {
         List<Holiday> holidays = holidayRepository.findAll();
         return holidayMapper.holidaysToHolidayWithEmployeeResponseDtos(holidays);
     }
-
+    @Override
     public List<HolidayWithEmployeeResponseDto> findAllByEmployeeId(Integer id) {
         List<Holiday> holidays = holidayRepository.findAllByEmployee_Id(id);
         return holidayMapper.holidaysToHolidayWithEmployeeResponseDtos(holidays);
     }
-
+    @Override
     public void createHoliday(HolidayRequestDto holidayRequestDto) throws Exception {
         List<Holiday> holidays = new ArrayList<>();
 
@@ -90,7 +86,7 @@ public class HolidayService {
         if (!holidays.isEmpty())
             holidayRepository.saveAll(holidays);
     }
-
+    @Override
     public void updateHoliday(HolidayRequestDto holidayRequestDto) throws Exception {
         List<Holiday> holidays = new ArrayList<>();
         Holiday holiday = holidayRepository.findById(Integer.valueOf(holidayRequestDto.getId()))
@@ -155,7 +151,7 @@ public class HolidayService {
             holidayRepository.saveAll(holidays);
 
     }
-
+    @Override
     public boolean deleteHolidayById(Integer id) {
         try {
             Holiday holiday = holidayRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Holiday not found"));

@@ -1,6 +1,5 @@
 package com.beautyzone.beautysalonapp.service.impl;
 
-import com.beautyzone.beautysalonapp.constants.HolidayType;
 import com.beautyzone.beautysalonapp.constants.ShiftType;
 import com.beautyzone.beautysalonapp.constants.TimeSlotType;
 import com.beautyzone.beautysalonapp.domain.Shift;
@@ -12,6 +11,7 @@ import com.beautyzone.beautysalonapp.rest.dto.ShiftRequestDto;
 import com.beautyzone.beautysalonapp.rest.dto.ShiftWithEmployeeResponseDto;
 import com.beautyzone.beautysalonapp.rest.mapper.CategoryMapper;
 import com.beautyzone.beautysalonapp.rest.mapper.ShiftMapper;
+import com.beautyzone.beautysalonapp.service.ShiftService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ShiftService {
+public class ShiftServiceImpl implements ShiftService {
     private final TimeSlotRepository timeSlotRepository;
     private final UserRepository userRepository;
     private final ShiftRepository shiftRepository;
@@ -34,21 +34,22 @@ public class ShiftService {
     private final ShiftMapper shiftMapper;
     private final int timeSlotUnitInMinutes = 30;
 
+    @Override
     public ShiftWithEmployeeResponseDto findById(Integer id) {
         Shift shift = shiftRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Shift with id: " + id + "not found."));
         return shiftMapper.shiftToShiftWithEmployeeResponseDto(shift);
     }
-
+    @Override
     public List<ShiftWithEmployeeResponseDto> findAll() {
         List<Shift> shifts = shiftRepository.findAll();
         return shiftMapper.shiftsToShiftWithEmployeeResponseDtos(shifts);
     }
-
+    @Override
     public List<ShiftWithEmployeeResponseDto> findAllByEmployeeId(Integer id) {
         List<Shift> shifts = shiftRepository.findAllByEmployee_Id(id);
         return shiftMapper.shiftsToShiftWithEmployeeResponseDtos(shifts);
     }
-
+    @Override
     public void createShift(ShiftRequestDto shiftRequestDto) throws Exception {
         for (Integer employeeId : shiftRequestDto.getEmployees()) {
             LocalDateTime localStartShiftTime = shiftRequestDto.getShiftStart().withZoneSameInstant(ZoneId.of("Europe/Skopje")).toLocalDateTime();
@@ -115,7 +116,7 @@ public class ShiftService {
 //        if (!shifts.isEmpty())
 //            shiftRepository.saveAll(shifts);
     }
-
+    @Override
     public void updateShift(ShiftRequestDto shiftRequestDto) throws Exception {
         List<Shift> shifts = new ArrayList<>();
         Shift shift = shiftRepository.findById(Integer.valueOf(shiftRequestDto.getId()))
@@ -178,7 +179,7 @@ public class ShiftService {
             shiftRepository.saveAll(shifts);
 
     }
-
+    @Override
     public boolean deleteShiftById(Integer id) {
         try {
             Shift shift = shiftRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Shift not found"));

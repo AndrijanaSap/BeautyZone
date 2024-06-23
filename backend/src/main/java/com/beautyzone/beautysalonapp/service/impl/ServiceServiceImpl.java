@@ -7,6 +7,7 @@ import com.beautyzone.beautysalonapp.repository.ServiceRepository;
 import com.beautyzone.beautysalonapp.rest.dto.*;
 import com.beautyzone.beautysalonapp.rest.mapper.ServiceMapper;
 
+import com.beautyzone.beautysalonapp.service.ServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ServiceService {
+public class ServiceServiceImpl implements ServiceService {
 
     private final ServiceRepository serviceRepository;
     private final EmployeeRepository employeeRepository;
     private final CategoryRepository categoryRepository;
     private final ServiceMapper serviceMapper;
 
+    @Override
     public List<ServiceWithCategoryDto> findAll() throws NoSuchElementException {
         List<com.beautyzone.beautysalonapp.domain.Service> services = serviceRepository.findAll();
         if (services.isEmpty()) {
@@ -34,7 +36,7 @@ public class ServiceService {
         }
         return serviceMapper.servicesToServiceWithCategoryDtos(services);
     }
-
+    @Override
     public List<ServiceWithEmployeesDto> getAllServicesWithEmployees() throws NoSuchElementException {
         List<com.beautyzone.beautysalonapp.domain.Service> services = serviceRepository.findAll();
         if (services.isEmpty()) {
@@ -42,17 +44,17 @@ public class ServiceService {
         }
         return serviceMapper.servicesToServiceWithEmployeeesDtos(services);
     }
-
+    @Override
     public ServiceWithCategoryDto findById(Integer id) {
         com.beautyzone.beautysalonapp.domain.Service service = serviceRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Service not found with id: " + id));
         return serviceMapper.serviceToServiceWithCategoryDto(service);
     }
-
+    @Override
     public ServiceWithEmployeesDto getServiceWithEmployeesById(Integer id) {
         com.beautyzone.beautysalonapp.domain.Service service = serviceRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Service not found with id: " + id));
         return serviceMapper.serviceToServiceWithEmployeeesDto(service);
     }
-
+    @Override
     public Integer addService(ServiceUpdateRequestDto request, MultipartFile img) throws IOException {
         ;
         var service = com.beautyzone.beautysalonapp.domain.Service.builder()
@@ -80,7 +82,7 @@ public class ServiceService {
 
         return service.getId();
     }
-
+    @Override
     public void updateService(ServiceUpdateRequestDto serviceUpdateRequestDto, MultipartFile img) throws IOException {
         com.beautyzone.beautysalonapp.domain.Service service = serviceRepository.findById(serviceUpdateRequestDto.getId()).orElseThrow(() -> new UsernameNotFoundException("Service not found"));
         service.setName(serviceUpdateRequestDto.getName());
@@ -101,7 +103,7 @@ public class ServiceService {
 
         serviceRepository.saveAndFlush(service);
     }
-
+    @Override
     public boolean deleteServiceById(Integer id) {
         try {
             serviceRepository.deleteById(id);
@@ -110,13 +112,13 @@ public class ServiceService {
         }
         return !serviceRepository.existsById(id);
     }
-
+    @Override
     public Optional<String> getExtensionByStringHandling(String filename) {
         return Optional.ofNullable(filename)
                 .filter(f -> f.contains("."))
                 .map(f -> f.substring(filename.lastIndexOf(".") + 1));
     }
-
+    @Override
     public List<ServiceWithCategoryDto> getPopularServices() throws NoSuchElementException {
         List<com.beautyzone.beautysalonapp.domain.Service> services = serviceRepository.findAll();
         if (services.isEmpty()) {

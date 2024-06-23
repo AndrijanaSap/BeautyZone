@@ -1,13 +1,11 @@
 package com.beautyzone.beautysalonapp.rest;
 
 import com.beautyzone.beautysalonapp.rest.dto.HolidayRequestDto;
-import com.beautyzone.beautysalonapp.service.impl.HolidayService;
+import com.beautyzone.beautysalonapp.service.impl.HolidayServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -15,12 +13,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class HolidayController {
 
-    private final HolidayService holidayService;
+    private final HolidayServiceImpl holidayServiceImpl;
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         try {
-            return ResponseEntity.ok(holidayService.findAll());
+            return ResponseEntity.ok(holidayServiceImpl.findAll());
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -28,7 +26,7 @@ public class HolidayController {
     @GetMapping("/getAllByEmployeeId/{employeeId}")
     public ResponseEntity<?> getAllByEmployeeId(@PathVariable Integer employeeId) {
         try {
-            return ResponseEntity.ok(holidayService.findAllByEmployeeId(employeeId));
+            return ResponseEntity.ok(holidayServiceImpl.findAllByEmployeeId(employeeId));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -37,7 +35,7 @@ public class HolidayController {
     @GetMapping("/{holidayId}")
     public ResponseEntity<?> getHolidayById(@PathVariable Integer holidayId) {
         try {
-            return ResponseEntity.ok(holidayService.findById(holidayId));
+            return ResponseEntity.ok(holidayServiceImpl.findById(holidayId));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -45,7 +43,7 @@ public class HolidayController {
     @PostMapping("/createHoliday")
     public ResponseEntity<?> createAnHoliday(@RequestBody HolidayRequestDto requestDto){
         try {
-            holidayService.createHoliday(requestDto);
+            holidayServiceImpl.createHoliday(requestDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -55,7 +53,7 @@ public class HolidayController {
     @PostMapping("/updateHoliday")
     public ResponseEntity<?> updateAnHoliday(@RequestBody HolidayRequestDto requestDto){
         try {
-            holidayService.updateHoliday(requestDto);
+            holidayServiceImpl.updateHoliday(requestDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -64,6 +62,6 @@ public class HolidayController {
 
     @DeleteMapping("/delete/{id}")
     public boolean deleteHoliday(@PathVariable Integer id) {
-        return holidayService.deleteHolidayById(id);
+        return holidayServiceImpl.deleteHolidayById(id);
     }
 }

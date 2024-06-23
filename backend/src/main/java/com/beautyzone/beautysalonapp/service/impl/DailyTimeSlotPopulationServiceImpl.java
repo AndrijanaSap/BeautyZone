@@ -16,7 +16,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Service
-public class DailyTimeSlotPopulationService {
+public class DailyTimeSlotPopulationServiceImpl {
 
     @Autowired
     private TimeSlotRepository timeSlotRepository;

@@ -1,9 +1,8 @@
 package com.beautyzone.beautysalonapp.rest;
 
-import com.beautyzone.beautysalonapp.rest.dto.AppointmentRequestDto;
 import com.beautyzone.beautysalonapp.rest.dto.ChangePasswordRequest;
 import com.beautyzone.beautysalonapp.rest.dto.UserDto;
-import com.beautyzone.beautysalonapp.service.impl.UserService;
+import com.beautyzone.beautysalonapp.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService service;
+    private final UserServiceImpl service;
 
     @PatchMapping
     public ResponseEntity<?> changePassword(

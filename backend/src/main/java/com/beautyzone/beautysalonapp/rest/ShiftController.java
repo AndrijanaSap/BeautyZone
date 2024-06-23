@@ -1,7 +1,7 @@
 package com.beautyzone.beautysalonapp.rest;
 
 import com.beautyzone.beautysalonapp.rest.dto.ShiftRequestDto;
-import com.beautyzone.beautysalonapp.service.impl.ShiftService;
+import com.beautyzone.beautysalonapp.service.impl.ShiftServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ShiftController {
 
-    private final ShiftService shiftService;
+    private final ShiftServiceImpl shiftServiceImpl;
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         try {
-            return ResponseEntity.ok(shiftService.findAll());
+            return ResponseEntity.ok(shiftServiceImpl.findAll());
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -26,7 +26,7 @@ public class ShiftController {
     @GetMapping("/getAllByEmployeeId/{employeeId}")
     public ResponseEntity<?> getAllByEmployeeId(@PathVariable Integer employeeId) {
         try {
-            return ResponseEntity.ok(shiftService.findAllByEmployeeId(employeeId));
+            return ResponseEntity.ok(shiftServiceImpl.findAllByEmployeeId(employeeId));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -35,7 +35,7 @@ public class ShiftController {
     @GetMapping("/{shiftId}")
     public ResponseEntity<?> getShiftById(@PathVariable Integer shiftId) {
         try {
-            return ResponseEntity.ok(shiftService.findById(shiftId));
+            return ResponseEntity.ok(shiftServiceImpl.findById(shiftId));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -43,7 +43,7 @@ public class ShiftController {
     @PostMapping("/createShift")
     public ResponseEntity<?> createAnShift(@RequestBody ShiftRequestDto requestDto){
         try {
-            shiftService.createShift(requestDto);
+            shiftServiceImpl.createShift(requestDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -53,7 +53,7 @@ public class ShiftController {
     @PostMapping("/updateShift")
     public ResponseEntity<?> updateAnShift(@RequestBody ShiftRequestDto requestDto){
         try {
-            shiftService.updateShift(requestDto);
+            shiftServiceImpl.updateShift(requestDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -62,6 +62,6 @@ public class ShiftController {
 
     @DeleteMapping("/delete/{id}")
     public boolean deleteShift(@PathVariable Integer id) {
-        return shiftService.deleteShiftById(id);
+        return shiftServiceImpl.deleteShiftById(id);
     }
 }

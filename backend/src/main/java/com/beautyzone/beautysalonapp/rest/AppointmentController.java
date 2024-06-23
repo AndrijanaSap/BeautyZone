@@ -2,10 +2,7 @@ package com.beautyzone.beautysalonapp.rest;
 
 import com.beautyzone.beautysalonapp.rest.dto.AppointmentCustomerDataUpdateRequestDto;
 import com.beautyzone.beautysalonapp.rest.dto.AppointmentRequestDto;
-import com.beautyzone.beautysalonapp.rest.dto.AvailabilityRequestDto;
-import com.beautyzone.beautysalonapp.rest.dto.UserDto;
-import com.beautyzone.beautysalonapp.service.impl.AppointmentService;
-import com.beautyzone.beautysalonapp.service.impl.TimeSlotService;
+import com.beautyzone.beautysalonapp.service.impl.AppointmentServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,12 +17,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AppointmentController {
 
-    private final AppointmentService appointmentService;
+    private final AppointmentServiceImpl appointmentServiceImpl;
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         try {
-            return ResponseEntity.ok(appointmentService.findAll());
+            return ResponseEntity.ok(appointmentServiceImpl.findAll());
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -34,7 +31,7 @@ public class AppointmentController {
     @GetMapping("/getAllByClientId/{clientId}")
     public ResponseEntity<?> getAllByClientId(@PathVariable Integer clientId) {
         try {
-            return ResponseEntity.ok(appointmentService.findAllByClientId(clientId));
+            return ResponseEntity.ok(appointmentServiceImpl.findAllByClientId(clientId));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -43,7 +40,7 @@ public class AppointmentController {
     @GetMapping("/getAllByEmployeeId/{employeeId}")
     public ResponseEntity<?> getAllByEmployeeId(@PathVariable Integer employeeId) {
         try {
-            return ResponseEntity.ok(appointmentService.findAllByEmployeeId(employeeId));
+            return ResponseEntity.ok(appointmentServiceImpl.findAllByEmployeeId(employeeId));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -52,7 +49,7 @@ public class AppointmentController {
     @GetMapping("/{appointmentId}")
     public ResponseEntity<?> getAppointmentById(@PathVariable Integer appointmentId) {
         try {
-            return ResponseEntity.ok(appointmentService.findById(appointmentId));
+            return ResponseEntity.ok(appointmentServiceImpl.findById(appointmentId));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -60,7 +57,7 @@ public class AppointmentController {
     @PostMapping("/createAppointment")
     public ResponseEntity<?> createAnAppointment(@RequestBody AppointmentRequestDto appointmentRequestDto){
         try {
-            return ResponseEntity.ok(appointmentService.createAppointment(appointmentRequestDto));
+            return ResponseEntity.ok(appointmentServiceImpl.createAppointment(appointmentRequestDto));
         } catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -69,7 +66,7 @@ public class AppointmentController {
     @PostMapping("/updateAppointment")
     public ResponseEntity<?> updateAnAppointment(@RequestBody AppointmentRequestDto appointmentRequestDto){
         try {
-            return ResponseEntity.ok(appointmentService.updateAppointment(appointmentRequestDto));
+            return ResponseEntity.ok(appointmentServiceImpl.updateAppointment(appointmentRequestDto));
         } catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -79,7 +76,7 @@ public class AppointmentController {
     public ResponseEntity<?> calculateSignature(@RequestBody Map<String, String> params){
         try {
             String key = params.remove("key");
-            return ResponseEntity.ok(appointmentService.calculateSignature(key, params));
+            return ResponseEntity.ok(appointmentServiceImpl.calculateSignature(key, params));
         } catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -88,7 +85,7 @@ public class AppointmentController {
     @PutMapping("/updateAppointmentCustomerData")
     public ResponseEntity<?> updateAppointmentCustomerData(@RequestBody AppointmentCustomerDataUpdateRequestDto updateRequestDto){
         try {
-            appointmentService.updateAppointmentCustomerData(updateRequestDto);
+            appointmentServiceImpl.updateAppointmentCustomerData(updateRequestDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -97,6 +94,6 @@ public class AppointmentController {
 
     @DeleteMapping("/delete/{id}")
     public boolean deleteAppointment(@PathVariable Integer id) {
-        return appointmentService.deleteAppointmentById(id);
+        return appointmentServiceImpl.deleteAppointmentById(id);
     }
 }

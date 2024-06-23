@@ -1,9 +1,7 @@
 package com.beautyzone.beautysalonapp.rest;
 
-import com.beautyzone.beautysalonapp.rest.dto.EmployeeRegisterRequest;
-import com.beautyzone.beautysalonapp.rest.dto.EmployeeUpdateRequest;
 import com.beautyzone.beautysalonapp.rest.dto.ServiceUpdateRequestDto;
-import com.beautyzone.beautysalonapp.service.impl.ServiceService;
+import com.beautyzone.beautysalonapp.service.impl.ServiceServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,12 +18,12 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ServiceController {
 
-    private final ServiceService serviceService;
+    private final ServiceServiceImpl serviceServiceImpl;
 
     @GetMapping
     public ResponseEntity<?> getAllServices() {
         try {
-            return ResponseEntity.ok(serviceService.findAll());
+            return ResponseEntity.ok(serviceServiceImpl.findAll());
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -34,7 +32,7 @@ public class ServiceController {
     @GetMapping("/with-employees")
     public ResponseEntity<?> getAllServicesWithEmployees() {
         try {
-            return ResponseEntity.ok(serviceService.getAllServicesWithEmployees());
+            return ResponseEntity.ok(serviceServiceImpl.getAllServicesWithEmployees());
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -43,7 +41,7 @@ public class ServiceController {
     @GetMapping("/{serviceId}")
     public ResponseEntity<?> getServiceById(@PathVariable Integer serviceId) {
         try {
-            return ResponseEntity.ok(serviceService.findById(serviceId));
+            return ResponseEntity.ok(serviceServiceImpl.findById(serviceId));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -52,7 +50,7 @@ public class ServiceController {
     @GetMapping("/with-employees/{serviceId}")
     public ResponseEntity<?> getServiceWithEmployeesById(@PathVariable Integer serviceId) {
         try {
-            return ResponseEntity.ok(serviceService.getServiceWithEmployeesById(serviceId));
+            return ResponseEntity.ok(serviceServiceImpl.getServiceWithEmployeesById(serviceId));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -61,7 +59,7 @@ public class ServiceController {
     @GetMapping("/get-popular")
     public ResponseEntity<?> getPopularServices() {
         try {
-            return ResponseEntity.ok(serviceService.getPopularServices());
+            return ResponseEntity.ok(serviceServiceImpl.getPopularServices());
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
@@ -83,7 +81,7 @@ public class ServiceController {
     public ResponseEntity<?> addService(@RequestPart(value = "img", required = false) MultipartFile img,
                                         @RequestPart(value = "addDto") ServiceUpdateRequestDto serviceUpdateRequestDto) {
         try {
-            return ResponseEntity.ok(serviceService.addService(serviceUpdateRequestDto, img));
+            return ResponseEntity.ok(serviceServiceImpl.addService(serviceUpdateRequestDto, img));
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -93,7 +91,7 @@ public class ServiceController {
     public ResponseEntity<?> updateService(@RequestPart(value = "img", required = false) MultipartFile img,
                                            @RequestPart(value = "updateDto") ServiceUpdateRequestDto serviceUpdateRequestDto) {
         try {
-            serviceService.updateService(serviceUpdateRequestDto, img);
+            serviceServiceImpl.updateService(serviceUpdateRequestDto, img);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -103,6 +101,6 @@ public class ServiceController {
 
     @DeleteMapping("/delete/{id}")
     public boolean deleteService(@PathVariable Integer id) {
-        return serviceService.deleteServiceById(id);
+        return serviceServiceImpl.deleteServiceById(id);
     }
 }

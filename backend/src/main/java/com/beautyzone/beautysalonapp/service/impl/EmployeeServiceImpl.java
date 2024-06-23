@@ -7,6 +7,7 @@ import com.beautyzone.beautysalonapp.repository.ServiceRepository;
 import com.beautyzone.beautysalonapp.rest.dto.*;
 //import com.beautyzone.beautysalonapp.rest.mapper.EmployeeMapper;
 import com.beautyzone.beautysalonapp.rest.mapper.UserMapper;
+import com.beautyzone.beautysalonapp.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,22 +17,23 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeService {
+public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final ServiceRepository serviceRepository;
-    //    private final EmployeeMapper employeeMapper;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
+    @Override
     public List<UserDto> getEmployeesByServiceId(Integer serviceId) {
         return userMapper.usersToUserDtos(employeeRepository.findEmployeesByServiceId(serviceId));
     }
 
+    @Override
     public List<EmployeeWithServicesDto> getAllEmployees() {
         return userMapper.usersToEmployeeWithServicesDtos(employeeRepository.findAllByRole(Role.EMPLOYEE));
     }
-
+    @Override
     public void addEmployee(EmployeeRegisterRequest request) {
         ;
         var user = User.builder()
@@ -45,7 +47,7 @@ public class EmployeeService {
                 .build();
         employeeRepository.save(user);
     }
-
+    @Override
     public boolean deleteEmployeeById(Integer id) {
         try{
         employeeRepository.deleteById(id);
@@ -54,12 +56,12 @@ public class EmployeeService {
         }
         return !employeeRepository.existsById(id);
     }
-
+    @Override
     public EmployeeWithServicesDto getEmployeeById(Integer userId) {
         User user = employeeRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return userMapper.userToEmployeeWithServicesDto(user);
     }
-
+    @Override
     public void updateEmployee(EmployeeUpdateRequest employeeUpdateRequest) {
         User user = employeeRepository.findById(employeeUpdateRequest.getId()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         user.setName(employeeUpdateRequest.getName());

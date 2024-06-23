@@ -11,6 +11,7 @@ import com.beautyzone.beautysalonapp.repository.ServiceRepository;
 import com.beautyzone.beautysalonapp.rest.dto.*;
 import com.beautyzone.beautysalonapp.rest.mapper.TimeSlotMapper;
 import com.beautyzone.beautysalonapp.rest.mapper.CategoryMapper;
+import com.beautyzone.beautysalonapp.service.TimeSlotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +21,17 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TimeSlotService {
+public class TimeSlotServiceImpl implements TimeSlotService {
 
     private final TimeSlotRepository timeSlotRepository;
     private final ServiceRepository serviceRepository;
     private final EmployeeRepository employeeRepository;
-    private final ServiceService serviceService;
+    private final ServiceServiceImpl serviceServiceImpl;
     private final CategoryMapper categoryMapper;
     private final TimeSlotMapper timeSlotMapper;
     private final int timeSlotUnitInMinutes = 30;
 
+    @Override
     public List<AvailabilityResponseDto> checkAvailability(AvailabilityRequestDto availabilityRequestDto) {
         List<AvailabilityResponseDto> availabilityResponseDtos = new ArrayList<>();
         List<Integer> employeeIds = new ArrayList<>();

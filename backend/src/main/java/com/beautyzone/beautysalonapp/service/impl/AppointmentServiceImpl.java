@@ -2,7 +2,6 @@ package com.beautyzone.beautysalonapp.service.impl;
 
 import com.beautyzone.beautysalonapp.constants.AppointmentStatus;
 import com.beautyzone.beautysalonapp.constants.PaymentMethod;
-import com.beautyzone.beautysalonapp.constants.Role;
 import com.beautyzone.beautysalonapp.constants.TimeSlotType;
 import com.beautyzone.beautysalonapp.domain.Appointment;
 //import com.beautyzone.beautysalonapp.domain.Employee;
@@ -12,12 +11,10 @@ import com.beautyzone.beautysalonapp.exception.NoSuchElementException;
 import com.beautyzone.beautysalonapp.repository.*;
 import com.beautyzone.beautysalonapp.rest.dto.*;
 import com.beautyzone.beautysalonapp.rest.mapper.AppointmentMapper;
-import com.beautyzone.beautysalonapp.rest.mapper.CategoryMapper;
-import com.beautyzone.beautysalonapp.rest.mapper.TimeSlotMapper;
+import com.beautyzone.beautysalonapp.service.AppointmentService;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,13 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Time;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -56,7 +47,7 @@ import org.w3c.dom.NodeList;
 
 @Service
 @RequiredArgsConstructor
-public class AppointmentService {
+public class AppointmentServiceImpl implements AppointmentService {
     public static final String RESPONSE_CODE_ELEMENT = "response-code";
     public static final String DESCRIPTION_ELEMENT = "description";
 
@@ -67,27 +58,32 @@ public class AppointmentService {
     private final AppointmentMapper appointmentMapper;
     private final int timeSlotUnitInMinutes = 30;
 
+    @Override
     public AppointmentWithEmployeeResponseDto findById(Integer id) {
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(() ->
                 new NoSuchElementException("Appointment with id: " + id + "not found."));
         return appointmentMapper.appointmentToAppointmentWithEmployeeResponseDto(appointment);
     }
 
+    @Override
     public List<AppointmentWithEmployeeResponseDto> findAll() {
         List<Appointment> appointments = appointmentRepository.findAll();
         return appointmentMapper.appointmentsToAppointmentWithEmployeeResponseDtos(appointments);
     }
 
+    @Override
     public List<AppointmentWithEmployeeResponseDto> findAllByClientId(Integer id) {
         List<Appointment> appointments = appointmentRepository.findAllByClient_Id(id);
         return appointmentMapper.appointmentsToAppointmentWithEmployeeResponseDtos(appointments);
     }
 
+    @Override
     public List<AppointmentWithClientResponseDto> findAllByEmployeeId(Integer id) {
         List<Appointment> appointments = appointmentRepository.findAllByEmployee_Id(id);
         return appointmentMapper.appointmentsToAppointmentWithClientResponseDtos(appointments);
     }
 
+    @Override
     public AppointmentWithEmployeeResponseDto createAppointment(AppointmentRequestDto appointmentRequestDto) {
         try {
             List<Timeslot> timeslots = timeSlotRepository.findAllById(appointmentRequestDto.getTimeSlotIds());
@@ -139,6 +135,7 @@ public class AppointmentService {
         }
     }
 
+    @Override
     public boolean updateAppointment(AppointmentRequestDto appointmentRequestDto) {
         try {
             Appointment appointment = appointmentRepository.findById(Integer.valueOf(appointmentRequestDto.getId()))
@@ -196,6 +193,7 @@ public class AppointmentService {
         }
     }
 
+    @Override
     public String calculateSignature(String secretKey, Map<String, String> params) throws NoSuchAlgorithmException, InvalidKeyException {
         String requestParamsStr = params.entrySet().stream().sorted(Map.Entry.comparingByKey())
                 .map(s -> s.getKey() + s.getValue()).collect(Collectors.joining());
@@ -205,6 +203,7 @@ public class AppointmentService {
         return gson.toJson(calculateSignature(requestParamsStr, secretKey));
     }
 
+    @Override
     public String calculateSignature(String stringMessage, String secretKey) throws NoSuchAlgorithmException, InvalidKeyException {
         String calculatedSignature = "";
 
@@ -219,6 +218,7 @@ public class AppointmentService {
 
     }
 
+    @Override
     public int handleSuccessfulPayment(IpgResponseDto ipgResponseDto) throws Exception {
         int appointmentId = Integer.parseInt(ipgResponseDto.getOrderNumber().replace("-test", ""));
         Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() -> new NoSuchElementException("Appointment with id " + appointmentId + " has not be found: "));
@@ -231,6 +231,7 @@ public class AppointmentService {
             throw new Exception("Expected appointment statuses are " + AppointmentStatus.WAITING_FOR_PAYMENT + " , or " + AppointmentStatus.RESERVED + " but we got " + appointment.getAppointmentStatus() + " ");
     }
 
+    @Override
     public int handleCanceledPayment(IpgResponseDto ipgResponseDto) throws Exception {
         int appointmentId = Integer.parseInt(ipgResponseDto.getOrderNumber().replace("-test", ""));
         Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() -> new NoSuchElementException("Appointment with id " + appointmentId + " has not been found: "));
@@ -243,6 +244,7 @@ public class AppointmentService {
             throw new Exception("Expected appointment statuses are " + AppointmentStatus.WAITING_FOR_PAYMENT + " , or " + AppointmentStatus.RESERVED + " but we got " + appointment.getAppointmentStatus() + " ");
     }
 
+    @Override
     public void updateAppointmentCustomerData(AppointmentCustomerDataUpdateRequestDto updateRequestDto) {
         Appointment appointment = appointmentRepository.findById(updateRequestDto.getId()).orElseThrow(() -> new NoSuchElementException("Appointment not found with id: " + updateRequestDto.getId()));
         appointment.setName(updateRequestDto.getName());
@@ -253,6 +255,7 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
     }
 
+    @Override
     public boolean deleteAppointmentById(Integer id) {
         try {
             Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Appointment not found"));
