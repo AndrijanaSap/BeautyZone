@@ -11,47 +11,55 @@
                         <div class="col-lg-12">
                             <h1>Employees</h1>
                         </div>
-                    </div>
+                    </div> 
                     <div class="row">
                         <div class="col-lg-12">
-                            <button routerLink="/add-employee" type="button" class="btn btn-default btn-sm">Add employee</button>
-                            <button routerLink="/add-employee" type="button" class="btn btn-default btn-sm">Add holiday</button>
-                            <button routerLink="/add-employee" type="button" class="btn btn-default btn-sm">Add employee</button>
-                         
+                            <div class="col-md-2  col-sm-5 ml-auto">
+                                 <button  mat-fab extended  color="default" routerLink="/add-employee" type="button" class="btn btn-default btn-sm"><mat-icon>add</mat-icon>Add
+                                employee</button></div>
+                           
                             
-<table class="table">
-	<thead>
-		<tr>
-			<th scope="col">Id</th>
-			<th scope="col" sortable="name" (sort)="onSort($event)">Name</th>
-			<th scope="col" sortable="surname" (sort)="onSort($event)">Surname</th>
-			<th scope="col" sortable="phone" (sort)="onSort($event)">Phone</th>
-            <th scope="col" sortable="email" (sort)="onSort($event)">Email</th>
-            <th scope="col">Services</th>
-            <th scope="col"></th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr *ngFor="let employee of dataSource">
-			<th scope="row">{{ employee.id }}</th>
-			<td>{{ employee.name }}</td>
-			<td>{{ employee.surname }}</td>
-			<td>{{ employee.phone }}</td>
-            <td>{{ employee.email }}</td>
-            <td>
-                <ul>
-                    <li *ngFor="let service of employee.services">
-                        {{ service.name }}
-                    </li>
-                </ul>    
-            </td>
-            <td>
-                <button [routerLink]="'/edit-employee/'+employee.id" type="button" class="btn btn-default btn-sm">Edit</button> 
-                <button (click)="delete(employee.id)" type="button" class="btn btn-default btn-sm">Delete</button>
-                <button type="button" class="btn btn-default btn-sm" routerLink="/employee-appointments" [queryParams]="{employeeId: employee.id}">See work schedule</button></td>
-		</tr>
-	</tbody>
-</table>
+
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Id</th>
+                                        <th scope="col" sortable="name" (sort)="onSort($event)">Name</th>
+                                        <th scope="col" sortable="surname" (sort)="onSort($event)">Surname</th>
+                                        <th scope="col" sortable="phone" (sort)="onSort($event)">Phone</th>
+                                        <th scope="col" sortable="email" (sort)="onSort($event)">Email</th>
+                                        <th scope="col">Services</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let employee of dataSource">
+                                        <th scope="row">{{ employee.id }}</th>
+                                        <td>{{ employee.name }}</td>
+                                        <td>{{ employee.surname }}</td>
+                                        <td>{{ employee.phone }}</td>
+                                        <td>{{ employee.email }}</td>
+                                        <td>
+                                            <ul>
+                                                <li *ngFor="let service of employee.services">
+                                                    {{ service.name }}
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td style="width: 100%;">
+                                            <button [routerLink]="'/edit-employee/'+employee.id" type="button"
+                                                class="btn btn-default btn-sm"  mat-icon-button  >
+                                                <mat-icon>edit</mat-icon></button>
+                                            <button (click)="delete(employee.id)"  mat-icon-button type="button"
+                                                class="btn btn-default btn-sm" color="warn"> <mat-icon>delete</mat-icon></button>
+                                            <button type="button" class="btn btn-default btn-sm"
+                                                routerLink="/employee-appointments"
+                                                [queryParams]="{employeeId: employee.id}" mat-fab extended  color="default"> <mat-icon>calendar_today</mat-icon>See work schedule</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
                         </div>
                     </div>

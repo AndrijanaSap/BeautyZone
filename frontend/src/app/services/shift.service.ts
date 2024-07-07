@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ShiftRequestDto } from '../models/shift-request-dto.model';
 import { ShiftWithEmployeeResponseDto } from '../models/shift-with-employee-response-dto.model';
+import { ShiftWithHolidayResponseDto } from '../models/shift-with-holiday-response-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,11 @@ export class ShiftService{
   constructor(private http: HttpClient) { }
 
   createShift(createShiftRequestDto: ShiftRequestDto): Observable<ShiftWithEmployeeResponseDto> {
-    return this.http.post<ShiftWithEmployeeResponseDto>(this.apiUrl + '/createShift', createShiftRequestDto);
+    return this.http.post<ShiftWithEmployeeResponseDto>(`${this.apiUrl}/createShift`, createShiftRequestDto);
   }
 
   updateShift(updateShiftRequestDto: ShiftRequestDto): Observable<Boolean> {
-    return this.http.post<Boolean>(this.apiUrl + '/updateShift', updateShiftRequestDto);
+    return this.http.post<Boolean>(`${this.apiUrl}/updateShift`, updateShiftRequestDto);
   }
 
   getShiftById(id: string): Observable<ShiftWithEmployeeResponseDto> {
@@ -32,7 +33,11 @@ export class ShiftService{
     return this.http.get<ShiftWithEmployeeResponseDto[]>(`${this.apiUrl}/getAllByEmployeeId/${id}`);
   }
 
+  getAllByEmployeeIdWithHolidays(id: string): Observable<ShiftWithHolidayResponseDto[]> {
+    return this.http.get<ShiftWithHolidayResponseDto[]>(`${this.apiUrl}/getAllByEmployeeIdWithHolidays/${id}`);
+  }
+
   delete(id: string): Observable<boolean> {
-    return this.http.delete<boolean>(this.apiUrl + '/delete/' + id);
+    return this.http.delete<boolean>(`${this.apiUrl}/delete/${id}`);
   }
 }

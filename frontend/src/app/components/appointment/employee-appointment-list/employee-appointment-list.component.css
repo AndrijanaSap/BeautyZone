@@ -2,3 +2,9 @@
     background-color: #ad2121 !important;
     color: #fff;
   }
+  .nav-tabs-navigation {
+    text-align: initial;
+  }
+  .cal-week-view .cal-event {
+    color: #000000;
+}

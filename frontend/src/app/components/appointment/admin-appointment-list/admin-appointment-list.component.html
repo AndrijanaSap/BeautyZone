@@ -14,8 +14,10 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <button routerLink="/create-appointment" type="button" class="btn btn-default btn-sm">Add
-                                appointment</button>
+                            <div class="col-md-3 col-sm-5 ml-auto"> <button color="default" mat-fab extended
+                                    routerLink="/create-appointment" class="btn btn-default "><mat-icon>add</mat-icon>Add
+                                    appointment</button></div>
+
 
                             <table class="table">
                                 <thead>
@@ -47,16 +49,16 @@
                                         <td>{{ appointment.appointmentStatus }}</td>
                                         <td style="display: flex;">
                                             <button (click)="openDialog(appointment)" type="button"
-                                                class="btn btn-default btn-sm">Details</button>
+                                                class="btn btn-default btn-sm" mat-icon-button> <mat-icon>visibility</mat-icon></button>
                                             <button *ngIf="isAfterToday(appointment.appointmentDateTime)"
                                                 [routerLink]="'/edit-appointment/'+ appointment.id" type="button"
-                                                class="btn btn-default btn-sm">Edit</button>
+                                                class="btn btn-default btn-sm"  mat-icon-button> <mat-icon>edit</mat-icon></button>
                                             <button (click)="delete(appointment.id)" type="button"
-                                                class="btn btn-default btn-sm">Delete</button>
-                                            <button
+                                                class="btn btn-default btn-sm"  mat-icon-button  color="warn"> <mat-icon>delete</mat-icon></button>
+                                            <!-- <button
                                                 *ngIf="isAfterToday(appointment.appointmentDateTime) && appointment.appointmentStatus==='RESERVED'"
                                                 (click)="pay(appointment)" type="button"
-                                                class="btn btn-default btn-sm">Pay</button>
+                                                class="btn btn-default btn-sm">Pay</button> -->
                                     </tr>
                                 </tbody>
                             </table>

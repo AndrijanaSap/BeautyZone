@@ -5,7 +5,7 @@ import { AdminAppointmentListComponent } from './admin-appointment-list/admin-ap
 import { ClientAppointmentListComponent } from './client-appointment-list/client-appointment-list.component';
 import { CreateAppointmentComponent } from './create-appointment/create-appointment.component';
 import { EmployeeAppointmentListComponent } from './employee-appointment-list/employee-appointment-list.component';
-import { CalendarHeaderComponent } from 'src/app/utils/calendar-header.component';
+import { CalendarHeaderComponent } from 'src/app/shared/calendar-header/calendar-header.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { AppointmentEditComponent } from './appointment-edit/appointment-edit.component';

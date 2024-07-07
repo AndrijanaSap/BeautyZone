@@ -46,7 +46,6 @@ import { AdminServiceListComponent } from '../components/service/admin-service-l
 import { ServiceDetailsComponent } from '../components/service/service-details/service-details.component';
 import { ServiceListComponent } from '../components/service/service-list/service-list.component';
 import { ThankYouPageComponent } from '../components/thank-you-page/thank-you-page.component';
-import { CalendarHeaderComponent } from '../utils/calendar-header.component';
 import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AppointmentModule } from '../components/appointment/appointment.module';

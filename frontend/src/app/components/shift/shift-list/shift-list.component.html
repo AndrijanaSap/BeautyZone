@@ -14,8 +14,9 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <button routerLink="/add-shift" type="button" class="btn btn-default btn-sm">Add
-                                shift</button>
+                            <div class="col-md-2 col-sm-5 ml-auto"> <button routerLink="/add-shift" type="button" class="btn btn-default btn-sm" mat-fab extended  color="default"><mat-icon>add</mat-icon>Add
+                                shift</button></div>
+                           
 
                             <table class="table">
                                 <thead>
@@ -40,9 +41,10 @@
                                         <td>{{ shift.shiftType }}</td>
                                         <td style="display: flex;">
                                             <button [routerLink]="'/edit-shift/'+ shift.id" type="button"
-                                                class="btn btn-default btn-sm">Edit</button>
+                                                class="btn btn-default btn-sm"mat-icon-button  >
+                                                <mat-icon>edit</mat-icon></button>
                                             <button (click)="delete(shift.id)" type="button"
-                                                class="btn btn-default btn-sm">Delete</button>
+                                                class="btn btn-default btn-sm"mat-icon-button color="warn"> <mat-icon>delete</mat-icon></button>
                                     </tr>
                                 </tbody>
                             </table>

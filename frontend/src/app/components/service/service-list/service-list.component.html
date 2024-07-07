@@ -8,8 +8,8 @@
             <div class="nav-tabs-navigation">
                 <div class="nav-tabs-wrapper justify-content-center">
                     <br />
-                    <div class="col-md-1 col-sm-5 ml-auto">
-                        <button type="button" routerLink="/add-service" class="btn btn-default btn-sm">Add
+                    <div class="col-md-2 col-sm-5 ml-auto">
+                        <button type="button" routerLink="/add-service" class="btn btn-default btn-sm" mat-fab extended  color="default"><mat-icon>add</mat-icon>Add
                             service</button>
                     </div>
                     <ul ngbNav #nav="ngbNav" class="nav-tabs  justify-content-center" [activeId]="1">
@@ -30,16 +30,17 @@
                                                     </div>
                                                     <div class="col-md-1 col-sm-5 ml-auto mr-auto">
                                                         <button type="button" [routerLink]="service.id.toString()"
-                                                            class="btn btn-default btn-sm">View</button>
+                                                            class="btn btn-default btn-sm" mat-icon-button> <mat-icon>visibility</mat-icon></button>
                                                     </div>
                                                     <div class="col-md-1 col-sm-5 ml-auto mr-auto">
                                                         <button type="button"
                                                             [routerLink]="'/edit-service/'+ service.id"
-                                                            class="btn btn-default btn-sm">Edit</button>
+                                                            class="btn btn-default btn-sm" mat-icon-button  >
+                                                            <mat-icon>edit</mat-icon></button>
                                                     </div>
                                                     <div class="col-md-1 col-sm-5 ml-auto mr-auto">
                                                         <button type="button" (click)="delete(service.id)"
-                                                            class="btn btn-default btn-sm">Delete</button>
+                                                            class="btn btn-default btn-sm"mat-icon-button color="warn"> <mat-icon>delete</mat-icon></button>
                                                     </div>
                                                 </div>
                                             </li>

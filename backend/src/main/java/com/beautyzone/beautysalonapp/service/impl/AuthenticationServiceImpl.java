@@ -17,6 +17,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.beautyzone.beautysalonapp.constants.Role.CLIENT;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -34,12 +39,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phone(request.getPhone())
-                .role(Role.CLIENT)
+                .role(CLIENT)
                 .ipAddress(request.getIpAddress())
                 .build();
-        var savedUser = repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        saveUserToken(savedUser, jwtToken);
+        repository.save(user);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole().name());
+        var jwtToken = jwtService.generateToken(claims, user);
+//        saveUserToken(savedUser, jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .userId(user.getId())
@@ -56,9 +63,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
         var user = repository.findUserByEmail(request.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole().name());
+        var jwtToken = jwtService.generateToken(claims, user);
+//        revokeAllUserTokens(user);
+//        saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .userId(user.getId())

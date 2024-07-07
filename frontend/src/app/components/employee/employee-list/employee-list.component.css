@@ -25,3 +25,6 @@ th[sortable].desc:before {
 	transform: rotate(180deg);
 	-ms-transform: rotate(180deg);
 }
+button{
+	margin: 5px;
+}

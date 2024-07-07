@@ -1,6 +1,7 @@
 package com.beautyzone.beautysalonapp.domain;
 
 import com.beautyzone.beautysalonapp.constants.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,9 +34,11 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointment> clientAppointments;
 
+    @JsonIgnore
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "employee_service",
@@ -44,10 +47,12 @@ public class User implements UserDetails {
     )
     private List<Service> services;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JsonIgnore
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Shift> shifts;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JsonIgnore
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Holiday> holidays;
 
     @Override
@@ -84,5 +89,4 @@ public class User implements UserDetails {
     public String getPassword(){
         return password;
     }
-
 }

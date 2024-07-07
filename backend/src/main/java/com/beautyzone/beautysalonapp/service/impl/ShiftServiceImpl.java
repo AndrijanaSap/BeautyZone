@@ -7,9 +7,12 @@ import com.beautyzone.beautysalonapp.domain.Timeslot;
 import com.beautyzone.beautysalonapp.domain.User;
 import com.beautyzone.beautysalonapp.exception.NoSuchElementException;
 import com.beautyzone.beautysalonapp.repository.*;
+import com.beautyzone.beautysalonapp.rest.dto.HolidayWithEmployeeResponseDto;
 import com.beautyzone.beautysalonapp.rest.dto.ShiftRequestDto;
+import com.beautyzone.beautysalonapp.rest.dto.ShiftWithHolidayResponseDto;
 import com.beautyzone.beautysalonapp.rest.dto.ShiftWithEmployeeResponseDto;
 import com.beautyzone.beautysalonapp.rest.mapper.CategoryMapper;
+import com.beautyzone.beautysalonapp.rest.mapper.HolidayMapper;
 import com.beautyzone.beautysalonapp.rest.mapper.ShiftMapper;
 import com.beautyzone.beautysalonapp.service.ShiftService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +33,7 @@ public class ShiftServiceImpl implements ShiftService {
     private final ShiftRepository shiftRepository;
     private final EmployeeRepository employeeRepository;
     private final ServiceRepository serviceRepository;
-    private final CategoryMapper categoryMapper;
+    private final HolidayMapper holidayMapper;
     private final ShiftMapper shiftMapper;
     private final int timeSlotUnitInMinutes = 30;
 
@@ -39,16 +42,38 @@ public class ShiftServiceImpl implements ShiftService {
         Shift shift = shiftRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Shift with id: " + id + "not found."));
         return shiftMapper.shiftToShiftWithEmployeeResponseDto(shift);
     }
+
     @Override
     public List<ShiftWithEmployeeResponseDto> findAll() {
         List<Shift> shifts = shiftRepository.findAll();
         return shiftMapper.shiftsToShiftWithEmployeeResponseDtos(shifts);
     }
+
     @Override
     public List<ShiftWithEmployeeResponseDto> findAllByEmployeeId(Integer id) {
         List<Shift> shifts = shiftRepository.findAllByEmployee_Id(id);
         return shiftMapper.shiftsToShiftWithEmployeeResponseDtos(shifts);
     }
+
+    public List<ShiftWithHolidayResponseDto> getAllWithHolidays(Integer id) {
+        List<ShiftWithHolidayResponseDto> shiftWithHolidayResponseDtos = new ArrayList<>();
+        List<Shift> shifts = shiftRepository.findAllByEmployee_Id(id);
+        shifts.forEach(shift -> {
+            if (shift.getTimeslots().getFirst().getHoliday() != null)
+                shift.getTimeslots().getFirst().getHoliday().setEmployee(null);
+            shiftWithHolidayResponseDtos.add(
+                    ShiftWithHolidayResponseDto.builder()
+                            .id(shift.getId())
+                            .shiftStart(shift.getShiftStart())
+                            .shiftEnd(shift.getShiftEnd())
+                            .shiftType(shift.getShiftType())
+                            .holiday(holidayMapper.holidayToHolidayWithEmployeeResponseDto(shift.getTimeslots().getFirst().getHoliday()))
+                            .build()
+            );
+        });
+        return shiftWithHolidayResponseDtos;
+    }
+
     @Override
     public void createShift(ShiftRequestDto shiftRequestDto) throws Exception {
         for (Integer employeeId : shiftRequestDto.getEmployees()) {
@@ -80,7 +105,7 @@ public class ShiftServiceImpl implements ShiftService {
             Shift shiftDb = shiftRepository.save(shift);
 
             while (localStartDateTime.isBefore(localEndDateTime)) {
-                if(!currDate.toLocalDate().equals(localStartDateTime.toLocalDate())){
+                if (!currDate.toLocalDate().equals(localStartDateTime.toLocalDate())) {
                     currDate = localStartDateTime;
                     shift = new Shift();
                     shift.setEmployee(employee);
@@ -116,6 +141,7 @@ public class ShiftServiceImpl implements ShiftService {
 //        if (!shifts.isEmpty())
 //            shiftRepository.saveAll(shifts);
     }
+
     @Override
     public void updateShift(ShiftRequestDto shiftRequestDto) throws Exception {
         List<Shift> shifts = new ArrayList<>();
@@ -179,6 +205,7 @@ public class ShiftServiceImpl implements ShiftService {
             shiftRepository.saveAll(shifts);
 
     }
+
     @Override
     public boolean deleteShiftById(Integer id) {
         try {

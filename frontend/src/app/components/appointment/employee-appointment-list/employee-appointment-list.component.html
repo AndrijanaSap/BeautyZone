@@ -8,11 +8,25 @@
             <div class="nav-tabs-navigation">
                 <div class="nav-tabs-wrapper justify-content-center">
                     <br />
-                    <div class="col-md-1 col-sm-5 ml-auto">
-                        <button type="button" routerLink="/create-appointment" class="btn btn-default btn-sm">Add
+                    <div class="row">
+                      
+                      <div class="col-md-3 mr-auto" >
+                      <mat-form-field>
+                          <mat-label>Employee</mat-label>
+                          <mat-select [(value)]="employeeId" (selectionChange)="onEmployeeChange()" >
+                              <mat-option>Any</mat-option>
+                              <mat-option *ngFor="let employee of employees" [value]="employee.id">
+                                  {{employee.name}}
+                              </mat-option>
+                          </mat-select>
+                      </mat-form-field>
+                  </div>
+                    <div class="col-md-2 col-sm-5 ml-auto">
+                        <button type="button" routerLink="/create-appointment" class="btn btn-default btn-sm" mat-fab extended  color="default"><mat-icon>add</mat-icon>Add
                             appointment</button>
-                    </div>
-                    
+                    </div></div>
+                   
+                    <br><br>
                     <mwl-demo-utils-calendar-header [(view)]="view" [(viewDate)]="viewDate">
                     </mwl-demo-utils-calendar-header>
                     

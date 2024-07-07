@@ -14,8 +14,9 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <button routerLink="/add-holiday" type="button" class="btn btn-default btn-sm">Add
-                                holiday</button>
+                            <div class="col-md-2 col-sm-5 ml-auto"> <button routerLink="/add-holiday" type="button" class="btn btn-default btn-sm"  mat-fab extended  color="default"><mat-icon>add</mat-icon>  Add
+                                holiday</button></div>
+                           
 
                             <table class="table">
                                 <thead>
@@ -42,9 +43,10 @@
                                         </td>
                                         <td style="display: flex;">
                                             <button [routerLink]="'/edit-holiday/'+ holiday.id" type="button"
-                                                class="btn btn-default btn-sm">Edit</button>
+                                                class="btn btn-default btn-sm" mat-icon-button  >
+                                                <mat-icon>edit</mat-icon></button>
                                             <button (click)="delete(holiday.id)" type="button"
-                                                class="btn btn-default btn-sm">Delete</button>
+                                                class="btn btn-default btn-sm" mat-icon-button color="warn"> <mat-icon>delete</mat-icon></button>
                                     </tr>
                                 </tbody>
                             </table>

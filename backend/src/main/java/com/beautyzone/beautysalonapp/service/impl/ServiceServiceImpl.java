@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -120,7 +121,11 @@ public class ServiceServiceImpl implements ServiceService {
     }
     @Override
     public List<ServiceWithCategoryDto> getPopularServices() throws NoSuchElementException {
-        List<com.beautyzone.beautysalonapp.domain.Service> services = serviceRepository.findAll();
+        LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
+        List<com.beautyzone.beautysalonapp.domain.Service> services = serviceRepository.findTopThreeServicesWithMostAppointmentsWithStartDate(thirtyDaysAgo)
+                .stream()
+                .limit(3) // Ensure we only get top 3 results
+                .toList();;
         if (services.isEmpty()) {
             throw new NoSuchElementException("No service found!");
         }

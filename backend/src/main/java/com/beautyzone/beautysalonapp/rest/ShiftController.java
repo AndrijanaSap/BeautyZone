@@ -3,6 +3,7 @@ package com.beautyzone.beautysalonapp.rest;
 import com.beautyzone.beautysalonapp.rest.dto.ShiftRequestDto;
 import com.beautyzone.beautysalonapp.service.impl.ShiftServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/shifts")
 @RequiredArgsConstructor
+@Slf4j
 public class ShiftController {
 
     private final ShiftServiceImpl shiftServiceImpl;
@@ -28,6 +30,16 @@ public class ShiftController {
         try {
             return ResponseEntity.ok(shiftServiceImpl.findAllByEmployeeId(employeeId));
         } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/getAllByEmployeeIdWithHolidays/{employeeId}")
+    public ResponseEntity<?> getAllWithHolidays(@PathVariable Integer employeeId) {
+        try {
+            return ResponseEntity.ok(shiftServiceImpl.getAllWithHolidays(employeeId));
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }

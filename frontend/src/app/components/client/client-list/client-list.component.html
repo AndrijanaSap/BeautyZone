@@ -37,8 +37,9 @@
             <td>{{ user.email }}</td>
             <td>{{ user.ipAddress }}</td>
             <td>
-                <button [routerLink]="'/edit-client/'+user.id" type="button" class="btn btn-default btn-sm">Edit</button> 
-                <button (click)="delete(user.id)" type="button" class="btn btn-default btn-sm">Delete</button>
+                <button [routerLink]="'/edit-client/'+user.id" type="button" class="btn btn-default btn-sm" mat-icon-button  >
+                    <mat-icon>edit</mat-icon></button> 
+                <button (click)="delete(user.id)" type="button" class="btn btn-default btn-sm" mat-icon-button color="warn"> <mat-icon>delete</mat-icon></button>
             </td>
              	</tr>
 	</tbody>

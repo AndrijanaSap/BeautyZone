@@ -18,8 +18,6 @@ import java.util.function.Function;
 public class JwtService {
     private static final String SECRET_KEY = "8282736f8a87a436884e2ae1c243d69f0fff57233020b3396b4e5ee90d144b4a";
     private static final Long JWT_EXPIRATION = (long) (1000 * 60 * 60 * 10);
-//    @Value("${application.security.jwt.expiration}")
-//    private long jwtExpiration;
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -35,14 +33,6 @@ public class JwtService {
     }
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return buildToken(extraClaims, userDetails, JWT_EXPIRATION);
-//        return Jwts.builder()
-//                .setClaims(extraClaims)
-//                .setSubject(userDetails.getUsername())
-//                .setIssuedAt(new Date((System.currentTimeMillis())))
-//                //10 hours
-//                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-//                .signWith(getSecretKey(), SignatureAlgorithm.HS256)
-//                .compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails){

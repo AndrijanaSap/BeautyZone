@@ -132,6 +132,18 @@ export class NavbarComponent implements OnInit {
         }
     }
 
+    isRegister() {
+        var titlee = this.location.prepareExternalUrl(this.location.path());
+        if (titlee.charAt(0) === '#') {
+            titlee = titlee.slice(1);
+        }
+        if (titlee.startsWith('/register')) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
             
     isAdminLogin() {
         var titlee = this.location.prepareExternalUrl(this.location.path());
